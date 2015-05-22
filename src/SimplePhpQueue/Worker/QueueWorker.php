@@ -9,6 +9,7 @@ namespace SimplePhpQueue\Worker;
 use SimplePhpQueue\Queue\SourceQueue;
 use SimplePhpQueue\Handler\TaskHandler;
 use SimplePhpQueue\Logger\LoggerConfig;
+use SimplePhpQueue\Logger\Logger;
 
 class QueueWorker {
 
@@ -24,7 +25,8 @@ class QueueWorker {
         $this->taskHandler    = $taskHandler;
         $this->maxIterations  = $maxIterations;
         $this->iterations     = 0;
-        $this->logger         = LoggerConfig::getlogger(get_class($this), false);
+//        $this->logger         = LoggerConfig::getlogger(get_class($this), false);
+        $this->logger         = false;
     }
 
     public function setSourceQueue(SourceQueue $sourceQueue) {
@@ -39,8 +41,12 @@ class QueueWorker {
         $this->maxIterations = $maxIterations;
     }
 
+    public function setLogger(Logger $logger) {
+        $this->logger = $logger;
+    }
+
     public function start() {
-        $this->logger->debug("Starting Queue Worker!");
+        $this->log("debug", "Starting Queue Worker!");
         $this->iterations = 0;
         $this->starting();
         while ($this->isRunning()) {
@@ -48,34 +54,34 @@ class QueueWorker {
             try {
                 $task = $this->sourceQueue->getNext();
             } catch (\Exception $exception) {
-                $this->logger->error("Error getting data. Message: ". $exception->getMessage());
+                $this->log("error", "Error getting data. Message: ". $exception->getMessage());
                 $this->sourceQueue->error(false, $exception);
                 continue;
             }
             if ($task !== false ) {
                 if ($task === self::STOP_INSTRUCTION) {
-                    $this->logger->debug("STOP instruction received.");
+                    $this->log("debug", "STOP instruction received.");
                     break;
                 }
                 try {
                     $jobDone = $this->taskHandler->manage($task);
                     if ($jobDone) {
-                        $this->logger->debug("Successful Job: " . $task);
+                        $this->log("debug", "Successful Job: " . $task);
                         $this->sourceQueue->successful($task);
                     } else {
-                        $this->logger->debug("Failed Job:" . $task);
+                        $this->log("debug", "Failed Job:" . $task);
                         $this->sourceQueue->failed($task);
                     }
                 } catch (\Exception $exception) {
-                    $this->logger->error("Error Managing data. Data :" . $task .". Message: ". $exception->getMessage());
+                    $this->log("error", "Error Managing data. Data :" . $task .". Message: ". $exception->getMessage());
                     $this->sourceQueue->error($task, $exception);
                 }
             } else {
-                $this->logger->debug('Nothing to do.');
+                $this->log("debug", 'Nothing to do.');
                 $this->sourceQueue->nothingToDo();
             }
         }
-        $this->logger->debug("Queue Worker finished.");
+        $this->log("debug", "Queue Worker finished.");
         $this->finished();
     }
 
@@ -91,6 +97,11 @@ class QueueWorker {
 
     protected function finished() {
         return TRUE;
+    }
+
+    protected function log($type, $message) {
+        if($this->logger)
+            $this->logger->$type($message);
     }
 
 } 
