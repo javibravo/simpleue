@@ -10,5 +10,5 @@ namespace SimplePhpQueue\Task;
 
 
 interface Task {
-    public function manage();
+    public function manage($task);
 }

@@ -28,7 +28,8 @@ class RedisQueue implements Queue {
     }
 
     public function getNext() {
-        return $this->redisClient->brpoplpush($this->getSourceQueue(), $this->getProcessingQueue(), $this->maxWaitingSeconds);
+        $queueItem = $this->redisClient->brpoplpush($this->getSourceQueue(), $this->getProcessingQueue(), $this->maxWaitingSeconds);
+        return ($queueItem !== null) ? $queueItem : false;
     }
 
     public function successful($task) {

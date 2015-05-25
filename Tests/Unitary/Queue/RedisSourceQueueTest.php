@@ -23,8 +23,17 @@ class RedisQueueTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetNext() {
-        $this->redisClientMock->expects($this->once())->method('brpoplpush')->with('queue.test', 'queue.test:processing', 20);
-        $this->redisQueue->getNext();
+        $returnExample = "{string: example}";
+        $this->redisClientMock->expects($this->once())->method('brpoplpush')
+            ->with('queue.test', 'queue.test:processing', 20)->willReturn($returnExample);
+        $this->assertEquals($returnExample, $this->redisQueue->getNext());
+    }
+
+    public function testGetNextMaxWaitReached() {
+        $returnExample = "{string: example}";
+        $this->redisClientMock->expects($this->once())->method('brpoplpush')
+            ->with('queue.test', 'queue.test:processing', 20)->willReturn(null);
+        $this->assertTrue(false === $this->redisQueue->getNext());
     }
 
     public function testSuccess() {

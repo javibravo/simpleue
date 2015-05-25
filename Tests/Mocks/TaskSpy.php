@@ -18,7 +18,7 @@ class TaskSpy implements Task {
         $this->manageCounter = 0;
     }
 
-    public function manage() {
+    public function manage($task) {
         $this->manageCounter++;
         return true;
     }
