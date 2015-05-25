@@ -12,7 +12,7 @@ require_once dirname(__FILE__).'/../../autoload.php';
 
 use Tests\Mocks\QueueWorkerSpy;
 use Tests\Mocks\SourceQueueSpy;
-use Tests\Mocks\TaskHandlerSpy;
+use Tests\Mocks\TaskSpy;
 
 class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
 
@@ -24,7 +24,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         date_default_timezone_set('Europe/London');
 
         $this->sourceQueueMock = new SourceQueueSpy();
-        $this->taskHandlerMock = new TaskHandlerSpy();
+        $this->taskHandlerMock = new TaskSpy();
         $this->queueWorkerSpy = new QueueWorkerSpy($this->sourceQueueMock, $this->taskHandlerMock);
     }
 
@@ -83,7 +83,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testRunManagedFailedJobs() {
-        $this->taskHandlerMock = $this->getMock('Tests\Mocks\TaskHandlerSpy', array('manage'));
+        $this->taskHandlerMock = $this->getMock('Tests\Mocks\TaskSpy', array('manage'));
         $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
         $this->taskHandlerMock->expects($this->at(1))->method('manage')->willReturn(false);
         $this->taskHandlerMock->expects($this->at(2))->method('manage')->willReturn(true);
@@ -101,7 +101,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testHandlerManageExceptions() {
-        $this->taskHandlerMock = $this->getMock('Tests\Mocks\TaskHandlerSpy', array('manage'));
+        $this->taskHandlerMock = $this->getMock('Tests\Mocks\TaskSpy', array('manage'));
         $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
         $this->taskHandlerMock->expects($this->at(1))->method('manage')->willThrowException(new \Exception('Testing exceptions'));
         $this->taskHandlerMock->expects($this->at(2))->method('manage')->willReturn(false);
@@ -134,7 +134,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSourceQueueSuccessfulAndFailedExceptions() {
-        $this->taskHandlerMock = $this->getMock('Tests\Mocks\TaskHandlerSpy', array('manage'));
+        $this->taskHandlerMock = $this->getMock('Tests\Mocks\TaskSpy', array('manage'));
         $this->sourceQueueMock = $this->getMock('Tests\Mocks\SourceQueueSpy', array('successful', 'failed'));
         $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
         $this->sourceQueueMock->expects($this->at(0))->method('successful')->willThrowException(new \Exception('Testing exceptions'));

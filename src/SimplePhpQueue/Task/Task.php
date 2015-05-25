@@ -6,9 +6,9 @@
  * Time: 18:08
  */
 
-namespace SimplePhpQueue\Handler;
+namespace SimplePhpQueue\Task;
 
 
-interface TaskHandler {
+interface Task {
     public function manage();
 }

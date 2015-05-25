@@ -8,9 +8,9 @@
 
 namespace Tests\Mocks;
 
-use SimplePhpQueue\Handler\TaskHandler;
+use SimplePhpQueue\Task\Task;
 
-class TaskHandlerSpy implements TaskHandler {
+class TaskSpy implements Task {
 
     private $manageCounter;
 
