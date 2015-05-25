@@ -10,7 +10,7 @@ namespace SimplePhpQueue\Queue;
 
 use Predis\Client;
 
-class RedisSourceQueue implements SourceQueue {
+class RedisSourceQueue implements Queue {
 
     private $redisClient;
     private $sourceQueue;

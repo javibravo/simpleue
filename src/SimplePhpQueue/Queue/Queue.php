@@ -9,7 +9,7 @@
 namespace SimplePhpQueue\Queue;
 
 
-interface SourceQueue {
+interface Queue {
 
     public function getNext();
     public function successful($task);

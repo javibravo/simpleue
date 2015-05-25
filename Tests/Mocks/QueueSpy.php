@@ -8,9 +8,9 @@
 
 namespace Tests\Mocks;
 
-use SimplePhpQueue\Queue\SourceQueue;
+use SimplePhpQueue\Queue\Queue;
 
-class SourceQueueSpy implements SourceQueue {
+class QueueSpy implements Queue {
 
     public $getNextCounter;
     public $successfulCounter;

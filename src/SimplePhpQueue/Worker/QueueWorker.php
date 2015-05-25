@@ -6,9 +6,8 @@
 
 namespace SimplePhpQueue\Worker;
 
-use SimplePhpQueue\Queue\SourceQueue;
+use SimplePhpQueue\Queue\Queue;
 use SimplePhpQueue\Task\Task;
-use SimplePhpQueue\Logger\LoggerConfig;
 use SimplePhpQueue\Logger\Logger;
 
 class QueueWorker {
@@ -20,20 +19,19 @@ class QueueWorker {
     protected $maxIterations;
     protected $logger;
 
-    function __construct(SourceQueue $sourceQueue, Task $taskHandler, $maxIterations = false) {
+    function __construct(Queue $sourceQueue, Task $taskHandler, $maxIterations = false) {
         $this->sourceQueue    = $sourceQueue;
         $this->taskHandler    = $taskHandler;
         $this->maxIterations  = $maxIterations;
         $this->iterations     = 0;
-//        $this->logger         = LoggerConfig::getlogger(get_class($this), false);
         $this->logger         = false;
     }
 
-    public function setSourceQueue(SourceQueue $sourceQueue) {
+    public function setSourceQueue(Queue $sourceQueue) {
         $this->sourceQueue = $sourceQueue;
     }
 
-    public function setTaskHandler(TaskHandler $taskHandler) {
+    public function setTaskHandler(Task $taskHandler) {
         $this->taskHandler = $taskHandler;
     }
 
