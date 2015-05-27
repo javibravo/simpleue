@@ -1,5 +1,18 @@
 {
+    "name": "javibravo/simple-php-queue",
+    "description": "Simple php queue worker to manage tasks.",
+    "keywords": ["queue", "task", "job", "redis"],
+    "homepage": "http://github.com/javibravo/simple-php-queue",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Javier Bravo",
+        "email": "javibravo85@gmail.com"
+      }
+    ],
     "require": {
+        "php": ">=5.3.0",
         "apache/log4php": "2.3.*",
         "predis/predis": "1.0.*"
     },
