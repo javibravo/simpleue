@@ -4,7 +4,7 @@
  * Date: 9/01/15
  */
 
-require_once dirname(__FILE__).'/../src/autoload.php';
+require_once dirname(__FILE__).'/../vendor/autoload.php';
 
 function testsAutoload($class) {
     $filePath = dirname(__FILE__) . '/../' . str_replace('\\', '/', $class).'.php';

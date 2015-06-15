@@ -13,7 +13,8 @@ require_once dirname(__FILE__).'/../autoload.php';
 use Predis\Client;
 use SimplePhpQueue\Queue\RedisQueue;
 use SimplePhpQueue\Worker\QueueWorker;
-use SimplePhpQueue\Logger\Log4PhpLogger;
+use SimplePhpQueue\Logger\MonologLogger;
+use Monolog\Logger as MonologLog;
 
 date_default_timezone_set('Europe/London');
 
@@ -22,5 +23,5 @@ $redisQueue = new RedisQueue(
     'queue.json.csv'
 );
 $jsonToCsvWorker = new QueueWorker($redisQueue, new JsonToCsvTask());
-$jsonToCsvWorker->setLogger(Log4PhpLogger::getInstance(dirname(__FILE__).'/../../logs', __FILE__));
+$jsonToCsvWorker->setLogger(MonologLogger::getInstance('testingLog', dirname(__FILE__).'/../../logs/testing.log', MonologLog::DEBUG));
 $jsonToCsvWorker->start();
