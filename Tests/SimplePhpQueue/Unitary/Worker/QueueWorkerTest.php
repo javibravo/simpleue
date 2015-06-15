@@ -6,13 +6,11 @@
  * Time: 17:01
  */
 
-namespace Tests\Unitary\Queue;
+namespace SimplePhpQueue\Unitary\Worker;
 
-require_once dirname(__FILE__).'/../../autoload.php';
-
-use Tests\Mocks\QueueWorkerSpy;
-use Tests\Mocks\QueueSpy;
-use Tests\Mocks\TaskSpy;
+use SimplePhpQueue\Mocks\QueueWorkerSpy;
+use SimplePhpQueue\Mocks\QueueSpy;
+use SimplePhpQueue\Mocks\TaskSpy;
 
 class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
 
@@ -49,7 +47,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testStopInstruction() {
-        $this->sourceQueueMock = $this->getMock('Tests\Mocks\QueueSpy', array('getNext'));
+        $this->sourceQueueMock = $this->getMock('SimplePhpQueue\Mocks\QueueSpy', array('getNext'));
         $this->sourceQueueMock->expects($this->at(0))->method('getNext')->willReturn(1);
         $this->sourceQueueMock->expects($this->at(1))->method('getNext')->willReturn(1);
         $this->sourceQueueMock->expects($this->at(2))->method('getNext')->willReturn('STOP');
@@ -65,7 +63,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testNothingToDo() {
-        $this->sourceQueueMock = $this->getMock('Tests\Mocks\QueueSpy', array('getNext'));
+        $this->sourceQueueMock = $this->getMock('SimplePhpQueue\Mocks\QueueSpy', array('getNext'));
         $this->sourceQueueMock->expects($this->at(0))->method('getNext')->willReturn(false);
         $this->sourceQueueMock->expects($this->at(1))->method('getNext')->willReturn(1);
         $this->sourceQueueMock->expects($this->at(2))->method('getNext')->willReturn(false);
@@ -83,7 +81,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testRunManagedFailedJobs() {
-        $this->taskHandlerMock = $this->getMock('Tests\Mocks\TaskSpy', array('manage'));
+        $this->taskHandlerMock = $this->getMock('SimplePhpQueue\Mocks\TaskSpy', array('manage'));
         $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
         $this->taskHandlerMock->expects($this->at(1))->method('manage')->willReturn(false);
         $this->taskHandlerMock->expects($this->at(2))->method('manage')->willReturn(true);
@@ -101,7 +99,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testHandlerManageExceptions() {
-        $this->taskHandlerMock = $this->getMock('Tests\Mocks\TaskSpy', array('manage'));
+        $this->taskHandlerMock = $this->getMock('SimplePhpQueue\Mocks\TaskSpy', array('manage'));
         $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
         $this->taskHandlerMock->expects($this->at(1))->method('manage')->willThrowException(new \Exception('Testing exceptions'));
         $this->taskHandlerMock->expects($this->at(2))->method('manage')->willReturn(false);
@@ -118,7 +116,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSourceQueueGetNextExceptions() {
-        $this->sourceQueueMock = $this->getMock('Tests\Mocks\QueueSpy', array('getNext'));
+        $this->sourceQueueMock = $this->getMock('SimplePhpQueue\Mocks\QueueSpy', array('getNext'));
         $this->sourceQueueMock->expects($this->at(0))->method('getNext')->willThrowException(new \Exception('Testing exceptions'));
         $this->sourceQueueMock->expects($this->at(1))->method('getNext')->willReturn(1);
         $this->sourceQueueMock->expects($this->at(2))->method('getNext')->willThrowException(new \Exception('Testing exceptions'));
@@ -134,8 +132,8 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSourceQueueSuccessfulAndFailedExceptions() {
-        $this->taskHandlerMock = $this->getMock('Tests\Mocks\TaskSpy', array('manage'));
-        $this->sourceQueueMock = $this->getMock('Tests\Mocks\QueueSpy', array('successful', 'failed'));
+        $this->taskHandlerMock = $this->getMock('SimplePhpQueue\Mocks\TaskSpy', array('manage'));
+        $this->sourceQueueMock = $this->getMock('SimplePhpQueue\Mocks\QueueSpy', array('successful', 'failed'));
         $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
         $this->sourceQueueMock->expects($this->at(0))->method('successful')->willThrowException(new \Exception('Testing exceptions'));
         $this->taskHandlerMock->expects($this->at(1))->method('manage')->willReturn(true);

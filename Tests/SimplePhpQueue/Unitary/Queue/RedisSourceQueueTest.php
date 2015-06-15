@@ -6,9 +6,7 @@
  * Time: 17:01
  */
 
-namespace Tests\Unitary\Queue;
-
-require_once dirname(__FILE__).'/../../autoload.php';
+namespace SimplePhpQueue\Unitary\Queue;
 
 use SimplePhpQueue\Queue\RedisQueue;
 

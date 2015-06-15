@@ -6,7 +6,7 @@
  * Time: 18:32
  */
 
-namespace Tests\Mocks;
+namespace SimplePhpQueue\Mocks;
 
 use SimplePhpQueue\Worker\QueueWorker;
 
