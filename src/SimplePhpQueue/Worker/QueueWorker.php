@@ -8,7 +8,7 @@ namespace SimplePhpQueue\Worker;
 
 use SimplePhpQueue\Queue\Queue;
 use SimplePhpQueue\Task\Task;
-use SimplePhpQueue\Logger\Logger;
+use Psr\Log\LoggerInterface;
 
 class QueueWorker {
 
@@ -39,7 +39,7 @@ class QueueWorker {
         $this->maxIterations = $maxIterations;
     }
 
-    public function setLogger(Logger $logger) {
+    public function setLogger(LoggerInterface $logger) {
         $this->logger = $logger;
     }
 

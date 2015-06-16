@@ -8,9 +8,11 @@
 
 namespace SimplePhpQueue\Unitary\Worker;
 
+use Predis\PubSub\DispatcherLoop;
 use SimplePhpQueue\Mocks\QueueWorkerSpy;
 use SimplePhpQueue\Mocks\QueueSpy;
 use SimplePhpQueue\Mocks\TaskSpy;
+use SimplePhpQueue\Mocks\LoggerSpy;
 
 class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
 
@@ -149,5 +151,34 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(4, $this->queueWorkerSpy->getIterations());
         $this->assertEquals(2, $this->sourceQueueMock->errorCounter, 'Error counter');
         $this->assertEquals(0, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
+    }
+
+    public function testLoggerDebug() {
+        $loggerSpy = new LoggerSpy();
+        $this->queueWorkerSpy->setMaxIterations(1);
+        $this->queueWorkerSpy->setLogger($loggerSpy);
+        $this->queueWorkerSpy->start();
+        $this->assertEquals(3, count($loggerSpy->debugMessages));
+
+        $loggerSpy = new LoggerSpy();
+        $this->queueWorkerSpy->setMaxIterations(3);
+        $this->queueWorkerSpy->setLogger($loggerSpy);
+        $this->queueWorkerSpy->start();
+        $this->assertEquals(5, count($loggerSpy->debugMessages));
+    }
+
+    public function testLoggerError() {
+        $loggerSpy = new LoggerSpy();
+        $this->taskHandlerMock = $this->getMock('SimplePhpQueue\Mocks\TaskSpy', array('manage'));
+        $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
+        $this->taskHandlerMock->expects($this->at(1))->method('manage')->willThrowException(new \Exception('Testing exceptions'));
+        $this->taskHandlerMock->expects($this->at(2))->method('manage')->willReturn(false);
+        $this->taskHandlerMock->expects($this->at(3))->method('manage')->willThrowException(new \Exception('Testing exceptions'));
+
+        $this->queueWorkerSpy = new QueueWorkerSpy($this->sourceQueueMock, $this->taskHandlerMock);
+        $this->queueWorkerSpy->setMaxIterations(4);
+        $this->queueWorkerSpy->setLogger($loggerSpy);
+        $this->queueWorkerSpy->start();
+        $this->assertEquals(2, count($loggerSpy->errorMessages));
     }
 }
