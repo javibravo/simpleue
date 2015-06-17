@@ -45,15 +45,15 @@ Require the package in your composer json file:
 
 ```json
 {
-    ...
+
 
     "require": {
-        ...
+
         "javibravo/simple-php-queue" : "dev-master",
-        ...
+
     },
 
-   ...
+
 }
 ```
 
@@ -78,6 +78,7 @@ class MyTask implements  Task {
         } catch ( ... ) {
             return FALSE;
         }
+        ...
         return TRUE;
     }
 
@@ -99,7 +100,7 @@ use MyProject\MyTask;
 
 $redisQueue = new RedisQueue(
     new Client(array('host' => 'localhost', 'port' => 6379, 'schema' => 'tcp')),
-    'queue.json.csv'
+    'my.queue.name'
 );
 $jsonToCsvWorker = new QueueWorker($redisQueue, new MyTask());
 $jsonToCsvWorker->start();
