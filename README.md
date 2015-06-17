@@ -41,9 +41,69 @@ The task interface is used to manage the task received in the queue.
 Install
 -------
 
+Require the package in your composer json file:
+
+```json
+{
+    ...
+
+    "require": {
+        ...
+        "javibravo/simple-php-queue" : "dev-master",
+        ...
+    },
+
+   ...
+}
+```
+
 Usage
 -----
 
+The firs step is to define and implement the task to be managed.
+
+```php
+<?php
+
+namespace MyProject\MyTask;
+
+use SimplePhpQueue\Task\Task;
+
+class MyTask implements  Task {
+
+    public function manage($task) {
+        ...
+        try {
+            ...
+        } catch ( ... ) {
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+    ...
+
+}
+```
+
+Once the task is defined we can define our worker and start running:
+
+```php
+<?php
+
+use Predis\Client;
+use SimplePhpQueue\Queue\RedisQueue;
+use SimplePhpQueue\Worker\QueueWorker;
+use SimplePhpQueue\Worker\QueueWorker;
+use MyProject\MyTask;
+
+$redisQueue = new RedisQueue(
+    new Client(array('host' => 'localhost', 'port' => 6379, 'schema' => 'tcp')),
+    'queue.json.csv'
+);
+$jsonToCsvWorker = new QueueWorker($redisQueue, new MyTask());
+$jsonToCsvWorker->start();
+```
 
 
 (*) Currently it is only working with redis queues. The idea is to support any queue
