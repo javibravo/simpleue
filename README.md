@@ -46,13 +46,9 @@ Require the package in your composer json file:
 ```json
 {
 
-
     "require": {
-
         "javibravo/simple-php-queue" : "dev-master",
-
     },
-
 
 }
 ```
