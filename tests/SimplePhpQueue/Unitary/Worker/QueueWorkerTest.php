@@ -1,14 +1,11 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: jbravo
+ * User: Javier Bravo
  * Date: 10/05/15
- * Time: 17:01
  */
 
 namespace SimplePhpQueue\Unitary\Worker;
 
-use Predis\PubSub\DispatcherLoop;
 use SimplePhpQueue\Mocks\QueueWorkerSpy;
 use SimplePhpQueue\Mocks\QueueSpy;
 use SimplePhpQueue\Mocks\TaskSpy;

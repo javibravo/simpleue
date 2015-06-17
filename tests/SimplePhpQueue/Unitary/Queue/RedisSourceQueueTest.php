@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: jbravo
+ * User: Javier Bravo
  * Date: 10/05/15
- * Time: 17:01
  */
 
 namespace SimplePhpQueue\Unitary\Queue;
