@@ -1,6 +1,6 @@
 {
     "name": "javibravo/simple-php-queue",
-    "description": "Simple php queue worker to manage tasks.",
+    "description": "Php package to manage queue tasks in a simple way",
     "keywords": ["queue", "task", "job", "redis"],
     "homepage": "http://github.com/javibravo/simple-php-queue",
     "type": "library",
