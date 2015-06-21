@@ -53,10 +53,10 @@ class QueueWorker {
                 $task = $this->sourceQueue->getNext();
             } catch (\Exception $exception) {
                 $this->log("error", "Error getting data. Message: ". $exception->getMessage());
-                $this->sourceQueue->error(false, $exception);
+                $this->sourceQueue->error(FALSE, $exception);
                 continue;
             }
-            if ($task !== false ) {
+            if ($this->isValidTask($task) ) {
                 if ($task === self::STOP_INSTRUCTION) {
                     $this->log("debug", "STOP instruction received.");
                     break;
@@ -79,6 +79,10 @@ class QueueWorker {
         if (is_int($this->maxIterations))
             return ($this->iterations < $this->maxIterations);
         return TRUE;
+    }
+
+    protected function isValidTask($task) {
+        return ($task !== FALSE);
     }
 
     protected function finished() {
