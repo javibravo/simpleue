@@ -61,19 +61,7 @@ class QueueWorker {
                     $this->log("debug", "STOP instruction received.");
                     break;
                 }
-                try {
-                    $jobDone = $this->taskHandler->manage($task);
-                    if ($jobDone) {
-                        $this->log("debug", "Successful Job: " . $task);
-                        $this->sourceQueue->successful($task);
-                    } else {
-                        $this->log("debug", "Failed Job:" . $task);
-                        $this->sourceQueue->failed($task);
-                    }
-                } catch (\Exception $exception) {
-                    $this->log("error", "Error Managing data. Data :" . $task .". Message: ". $exception->getMessage());
-                    $this->sourceQueue->error($task, $exception);
-                }
+                $this->manageTask($task);
             } else {
                 $this->log("debug", 'Nothing to do.');
                 $this->sourceQueue->nothingToDo();
@@ -100,6 +88,22 @@ class QueueWorker {
     protected function log($type, $message) {
         if($this->logger)
             $this->logger->$type($message);
+    }
+
+    private function manageTask($task) {
+        try {
+            $jobDone = $this->taskHandler->manage($task);
+            if ($jobDone) {
+                $this->log("debug", "Successful Job: " . $task);
+                $this->sourceQueue->successful($task);
+            } else {
+                $this->log("debug", "Failed Job:" . $task);
+                $this->sourceQueue->failed($task);
+            }
+        } catch (\Exception $exception) {
+            $this->log("error", "Error Managing data. Data :" . $task . ". Message: " . $exception->getMessage());
+            $this->sourceQueue->error($task, $exception);
+        }
     }
 
 } 
