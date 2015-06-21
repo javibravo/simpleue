@@ -71,6 +71,11 @@ class QueueWorker {
         $this->finished();
     }
 
+    protected function log($type, $message) {
+        if($this->logger)
+            $this->logger->$type($message);
+    }
+
     protected function starting() {
         return TRUE;
     }
@@ -83,15 +88,6 @@ class QueueWorker {
 
     protected function isValidTask($task) {
         return ($task !== FALSE);
-    }
-
-    protected function finished() {
-        return TRUE;
-    }
-
-    protected function log($type, $message) {
-        if($this->logger)
-            $this->logger->$type($message);
     }
 
     private function manageTask($task) {
@@ -108,6 +104,10 @@ class QueueWorker {
             $this->log("error", "Error Managing data. Data :" . $task . ". Message: " . $exception->getMessage());
             $this->sourceQueue->error($task, $exception);
         }
+    }
+
+    protected function finished() {
+        return TRUE;
     }
 
 } 
