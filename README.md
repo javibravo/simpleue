@@ -1,6 +1,8 @@
 SimplePHPQueue
 ==============
 
+[![Build Status](https://travis-ci.org/javibravo/simple-php-queue.svg?branch=master)](https://travis-ci.org/javibravo/simple-php-queue)
+
 SimplePHPQueue allows to run workers to consume queues in a very simple way. The
 library have been developed to be easily extended for any(*) queue server and
 open to manage any kind of task.
