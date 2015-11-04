@@ -55,7 +55,7 @@ class QueueWorker {
                 continue;
             }
             if ($this->isValidTask($task) ) {
-                if ($this->taskHandler->isStopInstruction($this->sourceQueue->getMessageBody($task))) {
+                if ($this->taskHandler->mustStop($this->sourceQueue->getMessageBody($task))) {
                     $this->sourceQueue->stopped($task);
                     $this->log("debug", "STOP instruction received.");
                     break;
