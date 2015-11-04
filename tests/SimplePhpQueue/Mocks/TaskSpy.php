@@ -21,4 +21,12 @@ class TaskSpy implements Task {
         return true;
     }
 
+    public function toString($task) {
+        return $task;
+    }
+
+    public function isStopInstruction($task) {
+        return ($task === 'STOP');
+    }
+
 }

@@ -12,8 +12,6 @@ use Psr\Log\LoggerInterface;
 
 class QueueWorker {
 
-    const STOP_INSTRUCTION = "STOP";
-
     protected $taskHandler;
     protected $iterations;
     protected $maxIterations;
