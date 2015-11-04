@@ -60,7 +60,7 @@ class QueueWorker {
                     $this->log("debug", "STOP instruction received.");
                     break;
                 }
-                $this->manageTask($this->sourceQueue->getMessageBody($task));
+                $this->manageTask($task);
             } else {
                 $this->log("debug", 'Nothing to do.');
                 $this->sourceQueue->nothingToDo();
@@ -91,7 +91,7 @@ class QueueWorker {
 
     private function manageTask($task) {
         try {
-            $jobDone = $this->taskHandler->manage($task);
+            $jobDone = $this->taskHandler->manage($this->sourceQueue->getMessageBody($task));
             if ($jobDone) {
                 $this->log("debug", "Successful Job: " . $this->taskHandler->toString($task));
                 $this->sourceQueue->successful($task);
