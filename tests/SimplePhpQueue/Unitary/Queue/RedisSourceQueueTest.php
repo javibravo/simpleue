@@ -26,7 +26,6 @@ class RedisQueueTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetNextMaxWaitReached() {
-        $returnExample = "{string: example}";
         $this->redisClientMock->expects($this->once())->method('brpoplpush')
             ->with('queue.test', 'queue.test:processing', 20)->willReturn(null);
         $this->assertTrue(false === $this->redisQueue->getNext());
