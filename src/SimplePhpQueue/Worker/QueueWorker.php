@@ -55,7 +55,7 @@ class QueueWorker {
                 continue;
             }
             if ($this->isValidTask($task) ) {
-                if ($this->taskHandler->isStopInstruction($task)) {
+                if ($this->taskHandler->isStopInstruction($this->sourceQueue->getMessageBody($task))) {
                     $this->sourceQueue->stopped($task);
                     $this->log("debug", "STOP instruction received.");
                     break;
@@ -93,14 +93,14 @@ class QueueWorker {
         try {
             $jobDone = $this->taskHandler->manage($this->sourceQueue->getMessageBody($task));
             if ($jobDone) {
-                $this->log("debug", "Successful Job: " . $this->taskHandler->toString($task));
+                $this->log("debug", "Successful Job: " . $this->sourceQueue->toString($task));
                 $this->sourceQueue->successful($task);
             } else {
-                $this->log("debug", "Failed Job:" . $this->taskHandler->toString($task));
+                $this->log("debug", "Failed Job:" . $this->sourceQueue->toString($task));
                 $this->sourceQueue->failed($task);
             }
         } catch (\Exception $exception) {
-            $this->log("error", "Error Managing data. Data :" . $this->taskHandler->toString($task) . ". Message: " . $exception->getMessage());
+            $this->log("error", "Error Managing data. Data :" . $this->sourceQueue->toString($task) . ". Message: " . $exception->getMessage());
             $this->sourceQueue->error($task, $exception);
         }
     }

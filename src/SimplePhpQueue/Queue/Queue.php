@@ -16,5 +16,6 @@ interface Queue {
     public function nothingToDo();
     public function stopped($task);
     public function getMessageBody($task);
+    public function toString($task);
 
 }

@@ -76,4 +76,8 @@ class RedisQueue implements Queue {
         return $this->sourceQueue . ":error";
     }
 
+    public function toString($task) {
+        return $task;
+    }
+
 }

@@ -104,4 +104,8 @@ class AwsSqsQueue implements Queue {
         return $task['Body'];
     }
 
+    public function toString($task) {
+        return json_encode($task);
+    }
+
 }

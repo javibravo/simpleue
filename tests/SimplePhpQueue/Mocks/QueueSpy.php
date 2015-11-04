@@ -62,4 +62,8 @@ class QueueSpy implements Queue {
         return $task;
     }
 
+    public function toString($task) {
+        return $task;
+    }
+
 }
