@@ -56,7 +56,7 @@ class RedisQueue implements Queue {
         return;
     }
 
-    public function getSourceQueue() {
+    protected function getSourceQueue() {
         return $this->sourceQueue;
     }
 

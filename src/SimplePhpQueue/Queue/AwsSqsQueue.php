@@ -28,13 +28,13 @@ class AwsSqsQueue implements Queue {
         $this->setQueues($queueName);
     }
 
-    private function setQueues($queueName) {
+    protected function setQueues($queueName) {
         $this->sourceQueueUrl = $this->getQueueUrl($queueName);
         $this->failedQueueUrl = $this->getQueueUrl($queueName.'-failed');
         $this->errorQueueUrl = $this->getQueueUrl($queueName.'-error');
     }
 
-    private function getQueueUrl($queueName) {
+    protected function getQueueUrl($queueName) {
         try {
             $queueData = $this->sqsClient->getQueueUrl(['QueueName' => $queueName]);
         } catch (SqsException $ex) {
@@ -65,7 +65,7 @@ class AwsSqsQueue implements Queue {
         $this->deleteMessage($this->sourceQueueUrl, $task['ReceiptHandle']);
     }
 
-    private function deleteMessage($queueUrl, $messageReceiptHandle) {
+    protected function deleteMessage($queueUrl, $messageReceiptHandle) {
         $this->sqsClient->deleteMessage([
             'QueueUrl' => $queueUrl,
             'ReceiptHandle' => $messageReceiptHandle

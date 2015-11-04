@@ -57,4 +57,10 @@ class RedisQueueTest extends \PHPUnit_Framework_TestCase {
         $this->redisQueue->nothingToDo();
     }
 
+    public function testStopped() {
+        $data = '{data:sample}';
+        $this->redisClientMock->expects($this->once())->method('lrem')->with('queue.test:processing', 1, $data);
+        $this->redisQueue->stopped($data);
+    }
+
 }
