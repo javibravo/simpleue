@@ -57,7 +57,7 @@ class QueueWorker {
                 continue;
             }
             if ($this->isValidTask($task) ) {
-                if ($task === self::STOP_INSTRUCTION) {
+                if ($this->taskHandler->isStopInstruction($task)) {
                     $this->log("debug", "STOP instruction received.");
                     break;
                 }

@@ -10,4 +10,5 @@ namespace SimplePhpQueue\Task;
 interface Task {
     public function manage($task);
     public function toString($task);
+    public function isStopInstruction($task);
 }
