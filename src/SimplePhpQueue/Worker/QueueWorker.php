@@ -94,14 +94,14 @@ class QueueWorker {
         try {
             $jobDone = $this->taskHandler->manage($task);
             if ($jobDone) {
-                $this->log("debug", "Successful Job: " . $task);
+                $this->log("debug", "Successful Job: " . $this->taskHandler->toString($task));
                 $this->sourceQueue->successful($task);
             } else {
-                $this->log("debug", "Failed Job:" . $task);
+                $this->log("debug", "Failed Job:" . $this->taskHandler->toString($task));
                 $this->sourceQueue->failed($task);
             }
         } catch (\Exception $exception) {
-            $this->log("error", "Error Managing data. Data :" . $task . ". Message: " . $exception->getMessage());
+            $this->log("error", "Error Managing data. Data :" . $this->taskHandler->toString($task) . ". Message: " . $exception->getMessage());
             $this->sourceQueue->error($task, $exception);
         }
     }
