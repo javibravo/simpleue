@@ -15,6 +15,7 @@ class QueueSpy implements Queue {
     public $failedCounter;
     public $errorCounter;
     public $nothingToDoCounter;
+    public $stoppedCounter;
 
     public function _construct() {
         $this->getNextCounter = 0;
@@ -22,6 +23,7 @@ class QueueSpy implements Queue {
         $this->failedCounter = 0;
         $this->errorCounter = 0;
         $this->nothingToDoCounter = 0;
+        $this->stoppedCounter = 0;
     }
 
     public function getNext() {
@@ -46,6 +48,11 @@ class QueueSpy implements Queue {
 
     public function nothingToDo() {
         $this->nothingToDoCounter++;
+        return;
+    }
+
+    public function stopped($task) {
+        $this->stoppedCounter++;
         return;
     }
 

@@ -62,40 +62,41 @@ class AwsSqsQueue implements Queue {
     }
 
     public function successful($task) {
+        $this->deleteMessage($this->sourceQueueUrl, $task['ReceiptHandle']);
+    }
+
+    private function deleteMessage($queueUrl, $messageReceiptHandle) {
         $this->sqsClient->deleteMessage([
-            'QueueUrl' => $this->sourceQueueUrl,
-            'ReceiptHandle' => $task['ReceiptHandle']
+            'QueueUrl' => $queueUrl,
+            'ReceiptHandle' => $messageReceiptHandle
         ]);
-        return;
     }
 
     public function failed($task) {
-        $this->sqsClient->sendMessage([
-            'QueueUrl' => $this->failedQueueUrl,
-            'MessageBody' => $task['Body']
-        ]);
-
-        $this->sqsClient->deleteMessage([
-            'QueueUrl' => $this->sourceQueueUrl,
-            'ReceiptHandle' => $task['ReceiptHandle']
-        ]);
+        $this->sendMessage($this->failedQueueUrl, $task['Body']);
+        $this->deleteMessage($this->sourceQueueUrl, $task['ReceiptHandle']);
         return;
     }
 
-    public function error($task) {
+    private function sendMessage($queueUrl, $messageBody) {
         $this->sqsClient->sendMessage([
-            'QueueUrl' => $this->errorQueueUrl,
-            'MessageBody' => $task['Body']
+            'QueueUrl' => $queueUrl,
+            'MessageBody' => $messageBody
         ]);
+    }
 
-        $this->sqsClient->deleteMessage([
-            'QueueUrl' => $this->sourceQueueUrl,
-            'ReceiptHandle' => $task['ReceiptHandle']
-        ]);
+    public function error($task) {
+        $this->sendMessage($this->errorQueueUrl, $task['Body']);
+        $this->deleteMessage($this->sourceQueueUrl, $task['ReceiptHandle']);
         return;
     }
 
     public function nothingToDo() {
+        return;
+    }
+
+    public function stopped($task) {
+        $this->deleteMessage($this->sourceQueueUrl, $task['ReceiptHandle']);
         return;
     }
 

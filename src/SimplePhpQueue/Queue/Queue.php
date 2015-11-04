@@ -14,5 +14,6 @@ interface Queue {
     public function failed($task);
     public function error($task);
     public function nothingToDo();
+    public function stopped($task);
 
 }

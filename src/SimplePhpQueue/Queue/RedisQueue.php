@@ -51,6 +51,11 @@ class RedisQueue implements Queue {
         $this->redisClient->ping();
     }
 
+    public function stopped($task) {
+        $this->redisClient->lrem($this->getProcessingQueue(), 1, $task);
+        return;
+    }
+
     public function getSourceQueue() {
         return $this->sourceQueue;
     }
