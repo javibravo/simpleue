@@ -43,7 +43,8 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $this->sourceQueueMock->failedCounter, 'Failed counter');
         $this->assertEquals(0, $this->sourceQueueMock->errorCounter, 'Error counter');
         $this->assertEquals(0, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
-        $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management');
+        $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management counter');
+        $this->assertEquals(10, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
     }
 
     public function testStopInstruction() {
@@ -60,7 +61,8 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $this->sourceQueueMock->failedCounter, 'Failed counter');
         $this->assertEquals(0, $this->sourceQueueMock->errorCounter, 'Error counter');
         $this->assertEquals(0, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
-        $this->assertEquals(1, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management');
+        $this->assertEquals(1, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management counter');
+        $this->assertEquals(2, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
     }
 
     public function testNothingToDo() {
@@ -79,7 +81,8 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $this->sourceQueueMock->failedCounter, 'Failed counter');
         $this->assertEquals(0, $this->sourceQueueMock->errorCounter, 'Error counter');
         $this->assertEquals(2, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
-        $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management');
+        $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management counter');
+        $this->assertEquals(3, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
     }
 
     public function testRunManagedFailedJobs() {
@@ -98,7 +101,8 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $this->sourceQueueMock->failedCounter, 'Failed counter');
         $this->assertEquals(0, $this->sourceQueueMock->errorCounter, 'Error counter');
         $this->assertEquals(0, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
-        $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management');
+        $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management counter');
+        $this->assertEquals(5, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
     }
 
     public function testHandlerManageExceptions() {
@@ -116,7 +120,8 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $this->sourceQueueMock->failedCounter, 'Failed counter');
         $this->assertEquals(2, $this->sourceQueueMock->errorCounter, 'Error counter');
         $this->assertEquals(0, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
-        $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management');
+        $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management counter');
+        $this->assertEquals(4, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
     }
 
     public function testSourceQueueGetNextExceptions() {
@@ -134,6 +139,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $this->sourceQueueMock->errorCounter, 'Error counter');
         $this->assertEquals(0, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
         $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management');
+        $this->assertEquals(1, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
     }
 
     public function testSourceQueueSuccessfulAndFailedExceptions() {
@@ -154,7 +160,8 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(4, $this->queueWorkerSpy->getIterations());
         $this->assertEquals(2, $this->sourceQueueMock->errorCounter, 'Error counter');
         $this->assertEquals(0, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
-        $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management');
+        $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management counter');
+        $this->assertEquals(4, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
     }
 
     public function testLoggerDebug() {

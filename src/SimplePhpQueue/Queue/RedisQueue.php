@@ -56,6 +56,10 @@ class RedisQueue implements Queue {
         return;
     }
 
+    public function getMessageBody($task) {
+        return $task;
+    }
+
     protected function getSourceQueue() {
         return $this->sourceQueue;
     }

@@ -100,4 +100,8 @@ class AwsSqsQueue implements Queue {
         return;
     }
 
+    public function getMessageBody($task) {
+        return $task['Body'];
+    }
+
 }

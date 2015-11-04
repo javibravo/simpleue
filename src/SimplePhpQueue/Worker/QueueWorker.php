@@ -60,7 +60,7 @@ class QueueWorker {
                     $this->log("debug", "STOP instruction received.");
                     break;
                 }
-                $this->manageTask($task);
+                $this->manageTask($this->sourceQueue->getMessageBody($task));
             } else {
                 $this->log("debug", 'Nothing to do.');
                 $this->sourceQueue->nothingToDo();
