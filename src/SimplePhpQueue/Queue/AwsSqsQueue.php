@@ -38,7 +38,7 @@ class AwsSqsQueue implements Queue {
         try {
             $queueData = $this->sqsClient->getQueueUrl(['QueueName' => $queueName]);
         } catch (SqsException $ex) {
-            $queueData = $this->sqsClient->createQueue(['QueueName' => $queueName]);
+            throw $ex;
         }
         return $queueData->get('QueueUrl');
     }
