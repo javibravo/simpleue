@@ -48,11 +48,12 @@ It require the queue system client:
 
 And was well the source *queue name*. The consumer will create additional queues to manage the process:
 
-   - Processing queue (only for Redis): It will store the item popped from source queue while it is being processed.
-   - Failed queue: All tasks that fail (according the Task definition) will be add in this queue.
-   - Error queue: All tasks that throw and exception in the management process will be add to this queue.
+   - **Processing queue** (only for Redis): It will store the item popped from source queue while it is being processed.
+   - **Failed queue**: All tasks that fail (according the Task definition) will be add in this queue.
+   - **Error queue**: All tasks that throw and exception in the management process will be add to this queue.
 
 **Important**
+
 For AWS SQS Queue all the queues must exist before start working.
 
 Task
