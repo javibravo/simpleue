@@ -3,12 +3,13 @@ SimplePHPQueue
 
 [![Build Status](https://travis-ci.org/javibravo/simple-php-queue.svg?branch=master)](https://travis-ci.org/javibravo/simple-php-queue)
 
-SimplePHPQueue allows to run workers to consume queues in a very simple way. The
-library have been developed to be easily extended for any(*) queue server and
+SimplePHPQueue provide a very simple way to run workers to consumer queues (consumers).
+The library have been developed to be easily extended for any(*) other queue server and
 open to manage any kind of task.
 
-Currently the lib only implement Redis queue interface, but open to implement any
-other.
+Current implementations:
+    - Redis queue interface.
+    - AWS SQS queue interface. 
 
 Worker
 ------
@@ -23,22 +24,30 @@ conditions) that manage all the stages to process tasks:
    - Execution error then do ...
    - No tasks then do ...
 
-The loop can be stopped specifying a maximum of iterations or with the special
-command "STOP" sent as a task.
+The loop can be stopped specifying a maximum of iterations or with and STOP task that must 
+be defined and managed by the Task Handler.
 
-Each running worker has one queue source and manage one type of tasks. Many workers
+Each consumer has one queue source and manage one type of tasks. Many workers
 can be working concurrently using the same queue source.
 
 Queue
 -----
 
-The lib provide an interface which allow to implement a queue connection for
-any(*) queue system. Currently Redis queue interface is the only one implemented.
+The lib provide an interface which allow to implement a queue connection for any(*) queue 
+system. Currently the lib provide following implementations:
+    - Redis queue interface.
+    - AWS SQS queue interface. 
+
+The queue interface manage all related with the queue system and abstract the task about that.
 
 Task
 ----
 
-The task interface is used to manage the task received in the queue.
+The task interface is used to manage the task received in the queue. It must manage the domain
+business logic and define the stop task.
+
+The task is abstracted form the queue system, so the same task definition is able to work with 
+different queues interfaces. The task always receive the message body in the queue.
 
 Install
 -------
@@ -58,7 +67,7 @@ Require the package in your composer json file:
 Usage
 -----
 
-The firs step is to define and implement the task to be managed.
+The first step is to define and implement the task to be managed.
 
 ```php
 <?php
@@ -81,11 +90,21 @@ class MyTask implements  Task {
     }
 
     ...
+    
+    public function mustStop($task) {
+        if ( ... )
+            return TRUE;
+        return FALSE;
+    }
+    
+    ...
 
 }
 ```
 
-Once the task is defined we can define our worker and start running:
+Once the task is defined we can define our consumer and start running:
+
+**Redis Consumer**
 
 ```php
 <?php
@@ -93,17 +112,36 @@ Once the task is defined we can define our worker and start running:
 use Predis\Client;
 use SimplePhpQueue\Queue\RedisQueue;
 use SimplePhpQueue\Worker\QueueWorker;
-use SimplePhpQueue\Worker\QueueWorker;
 use MyProject\MyTask;
 
 $redisQueue = new RedisQueue(
     new Client(array('host' => 'localhost', 'port' => 6379, 'schema' => 'tcp')),
-    'my.queue.name'
+    'my_queue_name'
 );
-$jsonToCsvWorker = new QueueWorker($redisQueue, new MyTask());
-$jsonToCsvWorker->start();
+$myNewConsumer = new QueueWorker($redisQueue, new MyTask());
+$myNewConsumer->start();
 ```
 
+**AWS SQS Consumer**
 
-(*) Currently it is only working with redis queues. The idea is to support any queue
-system, so it is open for that but not checked or tested with any other.
+```php
+<?php
+
+use Aws\Sqs\SqsClient;
+use SimplePhpQueue\Queue\AwsSqsQueue;
+use SimplePhpQueue\Worker\QueueWorker;
+use MyProject\MyTask;
+
+$sqsClient = new SqsClient([
+    'profile' => 'aws-profile',
+    'region' => 'eu-west-1',
+    'version' => 'latest'
+]);
+
+$sqsQueue = new AwsSqsQueue($sqsClient, 'my_queue_name');
+
+$myNewConsumer = new QueueWorker($sqsQueue, new MyTask());
+$myNewConsumer->start();
+```
+
+(*) The idea is to support any queue system, so it is open for that. Contributions are welcome.
