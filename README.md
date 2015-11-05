@@ -35,21 +35,24 @@ Queue
 
 The lib provide an interface which allow to implement a queue connection for any(*) queue 
 system. Currently the lib provide following implementations:
-    - Redis queue interface.
-    - AWS SQS queue interface. 
+
+   - Redis queue interface.
+   - AWS SQS queue interface. 
 
 The queue interface manage all related with the queue system and abstract the task about that.
 
 It require the queue system client:
-    - Redis : Predis\Client
-    - AWS SQS : Aws\Sqs\SqsClient
+
+   - Redis : Predis\Client
+   - AWS SQS : Aws\Sqs\SqsClient
 
 And was well the source *queue name*. The consumer will create additional queues to manage the process:
-    - Processing queue (only for Redis): It will store the item popped from source queue while it is being processed.
-    - Failed queue: All tasks that fail (according the Task definition) will be add in this queue.
-    - Error queue: All tasks that throw and exception in the management process will be add to this queue.
 
-*Important*
+   - Processing queue (only for Redis): It will store the item popped from source queue while it is being processed.
+   - Failed queue: All tasks that fail (according the Task definition) will be add in this queue.
+   - Error queue: All tasks that throw and exception in the management process will be add to this queue.
+
+**Important**
 For AWS SQS Queue all the queues must exist before start working.
 
 Task
