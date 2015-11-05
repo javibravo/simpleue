@@ -65,15 +65,15 @@ class RedisQueue implements Queue {
     }
 
     protected function getProcessingQueue() {
-        return $this->sourceQueue . ":processing";
+        return $this->sourceQueue . "-processing";
     }
 
     protected function getFailedQueue() {
-        return $this->sourceQueue . ":failed";
+        return $this->sourceQueue . "-failed";
     }
 
     protected function getErrorQueue() {
-        return $this->sourceQueue . ":error";
+        return $this->sourceQueue . "-error";
     }
 
     public function toString($task) {
