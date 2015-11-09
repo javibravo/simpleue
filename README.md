@@ -3,19 +3,22 @@ SimplePHPQueue
 
 [![Build Status](https://travis-ci.org/javibravo/simple-php-queue.svg?branch=master)](https://travis-ci.org/javibravo/simple-php-queue)
 
-SimplePHPQueue provide a very simple way to run workers to consumer queues (consumers).
-The library have been developed to be easily extended for any(*) other queue server and
-open to manage any kind of task.
+SimplePHPQueue provide a very simple way to run workers to consume queues (consumers).
+The library have been developed to be easily extended to work with different queue servers and
+open to manage any kind of tasks.
 
 Current implementations:
-    - Redis queue interface.
-    - AWS SQS queue interface. 
+
+   - Redis queue interface.
+   - AWS SQS queue interface. 
+
+You can find an example of use in [simple-php-queue-example](https://github.com/javibravo/simple-php-queue-example)
 
 Worker
 ------
 
 The lib has a worker class that run and infinite loop (can be stopped with some
-conditions) that manage all the stages to process tasks:
+conditions) and manage all the stages to process tasks:
 
    - Get next task.
    - Execute task.
@@ -27,14 +30,14 @@ conditions) that manage all the stages to process tasks:
 The loop can be stopped specifying a maximum of iterations or with and STOP task that must 
 be defined and managed by the Task Handler.
 
-Each consumer has one queue source and manage one type of tasks. Many workers
+Each worker has one queue source and manage one type of tasks. Many workers
 can be working concurrently using the same queue source.
 
 Queue
 -----
 
-The lib provide an interface which allow to implement a queue connection for any(*) queue 
-system. Currently the lib provide following implementations:
+The lib provide an interface which allow to implement a queue connection for different queue 
+servers. Currently the lib provide following implementations:
 
    - Redis queue interface.
    - AWS SQS queue interface. 
@@ -46,7 +49,7 @@ It require the queue system client:
    - Redis : Predis\Client
    - AWS SQS : Aws\Sqs\SqsClient
 
-And was well the source *queue name*. The consumer will create additional queues to manage the process:
+And was well the source *queue name*. The consumer will need additional queues to manage the process:
 
    - **Processing queue** (only for Redis): It will store the item popped from source queue while it is being processed.
    - **Failed queue**: All tasks that fail (according the Task definition) will be add in this queue.
@@ -60,10 +63,10 @@ Task
 ----
 
 The task interface is used to manage the task received in the queue. It must manage the domain
-business logic and define the stop task.
+business logic and define the STOP task.
 
 The task is abstracted form the queue system, so the same task definition is able to work with 
-different queues interfaces. The task always receive the message body in the queue.
+different queues interfaces. The task always receive the message body from the queue,
 
 Install
 -------
