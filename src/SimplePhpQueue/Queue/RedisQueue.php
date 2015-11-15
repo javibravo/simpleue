@@ -80,4 +80,8 @@ class RedisQueue implements Queue {
         return $task;
     }
 
+    public function sendTask($task) {
+        $this->redisClient->lpush($this->getSourceQueue(), $task);
+    }
+
 }

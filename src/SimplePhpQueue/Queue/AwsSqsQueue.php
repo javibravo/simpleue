@@ -108,4 +108,7 @@ class AwsSqsQueue implements Queue {
         return json_encode($task);
     }
 
+    public function sendTask($task) {
+        $this->sendMessage($this->sourceQueueUrl, $task);
+    }
 }
