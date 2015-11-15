@@ -9,8 +9,8 @@ open to manage any kind of tasks.
 
 Current implementations:
 
-   - Redis queue interface.
-   - AWS SQS queue interface. 
+   - **Redis** queue adapter.
+   - **AWS SQS** queue adapter. 
 
 You can find an example of use in [simple-php-queue-example](https://github.com/javibravo/simple-php-queue-example)
 
@@ -27,8 +27,10 @@ conditions) and manage all the stages to process tasks:
    - Execution error then do ...
    - No tasks then do ...
 
-The loop can be stopped specifying a maximum of iterations or with and STOP task that must 
-be defined and managed by the Task Handler.
+The loop can be **stopped** under control using the following methods:
+
+   - **STOP task** : The task handler allow to define a STOP task.
+   - **Max iterations** : It can be specified when the object is declared.
 
 Each worker has one queue source and manage one type of tasks. Many workers
 can be working concurrently using the same queue source.
@@ -39,8 +41,8 @@ Queue
 The lib provide an interface which allow to implement a queue connection for different queue 
 servers. Currently the lib provide following implementations:
 
-   - Redis queue interface.
-   - AWS SQS queue interface. 
+   - **Redis** queue adapter.
+   - **AWS SQS** queue adapter. 
 
 The queue interface manage all related with the queue system and abstract the task about that.
 
@@ -63,7 +65,7 @@ Task
 ----
 
 The task interface is used to manage the task received in the queue. It must manage the domain
-business logic and define the STOP task.
+business logic and **define the STOP task**.
 
 The task is abstracted form the queue system, so the same task definition is able to work with 
 different queues interfaces. The task always receive the message body from the queue,
