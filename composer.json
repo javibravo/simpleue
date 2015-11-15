@@ -26,7 +26,7 @@
     "autoload-dev": {
         "psr-4": {"SimplePhpQueue\\": "tests/SimplePhpQueue"}
     },
-    "require-dev": {
+    "suggest": {
         "predis/predis": "Allow work with Redis queues",
         "aws/aws-sdk-php": "Allow work with AWS Simple Queue Service (SQS) queues"
     }
