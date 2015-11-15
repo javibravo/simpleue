@@ -66,4 +66,8 @@ class QueueSpy implements Queue {
         return $task;
     }
 
+    public function sendTask($task) {
+        return;
+    }
+
 }
