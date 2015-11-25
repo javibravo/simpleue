@@ -6,9 +6,9 @@
 
 namespace Simpleue\Mocks;
 
-use Simpleue\Task\Task;
+use Simpleue\Job\Job;
 
-class TaskSpy implements Task {
+class JobSpy implements Job {
 
     private $manageCounter;
 
