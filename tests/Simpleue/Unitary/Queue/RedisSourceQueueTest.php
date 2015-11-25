@@ -32,9 +32,9 @@ class RedisQueueTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSuccess() {
-        $task = '{data:sample}';
-        $this->redisClientMock->expects($this->once())->method('lrem')->with('queue.test-processing', 1, $task);
-        $this->redisQueue->successful($task);
+        $job = '{data:sample}';
+        $this->redisClientMock->expects($this->once())->method('lrem')->with('queue.test-processing', 1, $job);
+        $this->redisQueue->successful($job);
     }
 
     public function testFailed() {

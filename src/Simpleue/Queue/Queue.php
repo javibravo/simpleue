@@ -10,13 +10,13 @@ namespace Simpleue\Queue;
 interface Queue {
 
     public function getNext();
-    public function successful($task);
-    public function failed($task);
-    public function error($task);
+    public function successful($job);
+    public function failed($job);
+    public function error($job);
     public function nothingToDo();
-    public function stopped($task);
-    public function getMessageBody($task);
-    public function toString($task);
-    public function sendTask($task);
+    public function stopped($job);
+    public function getMessageBody($job);
+    public function toString($job);
+    public function sendJob($job);
 
 }

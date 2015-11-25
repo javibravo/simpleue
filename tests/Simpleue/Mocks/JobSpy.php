@@ -16,13 +16,13 @@ class JobSpy implements Job {
         $this->manageCounter = 0;
     }
 
-    public function manage($task) {
+    public function manage($job) {
         $this->manageCounter++;
         return true;
     }
 
-    public function mustStop($task) {
-        return ($task === 'STOP');
+    public function mustStop($job) {
+        return ($job === 'STOP');
     }
 
 }

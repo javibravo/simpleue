@@ -32,19 +32,19 @@ class QueueSpy implements Queue {
         return rand(0,1000);
     }
 
-    public function successful($task) {
+    public function successful($job) {
         $this->successfulCounter++;
         return;
     }
 
-    public function failed($task) {
+    public function failed($job) {
         $this->failedCounter++;
-        return $task;
+        return $job;
     }
 
-    public function error($task) {
+    public function error($job) {
         $this->errorCounter++;
-        return $task;
+        return $job;
     }
 
     public function nothingToDo() {
@@ -52,21 +52,21 @@ class QueueSpy implements Queue {
         return;
     }
 
-    public function stopped($task) {
+    public function stopped($job) {
         $this->stoppedCounter++;
         return;
     }
 
-    public function getMessageBody($task) {
+    public function getMessageBody($job) {
         $this->getMessageBodyCounter++;
-        return $task;
+        return $job;
     }
 
-    public function toString($task) {
-        return $task;
+    public function toString($job) {
+        return $job;
     }
 
-    public function sendTask($task) {
+    public function sendJob($job) {
         return;
     }
 

@@ -61,8 +61,8 @@ class SqsQueue implements Queue {
         return false;
     }
 
-    public function successful($task) {
-        $this->deleteMessage($this->sourceQueueUrl, $task['ReceiptHandle']);
+    public function successful($job) {
+        $this->deleteMessage($this->sourceQueueUrl, $job['ReceiptHandle']);
     }
 
     protected function deleteMessage($queueUrl, $messageReceiptHandle) {
@@ -72,9 +72,9 @@ class SqsQueue implements Queue {
         ]);
     }
 
-    public function failed($task) {
-        $this->sendMessage($this->failedQueueUrl, $task['Body']);
-        $this->deleteMessage($this->sourceQueueUrl, $task['ReceiptHandle']);
+    public function failed($job) {
+        $this->sendMessage($this->failedQueueUrl, $job['Body']);
+        $this->deleteMessage($this->sourceQueueUrl, $job['ReceiptHandle']);
         return;
     }
 
@@ -85,9 +85,9 @@ class SqsQueue implements Queue {
         ]);
     }
 
-    public function error($task) {
-        $this->sendMessage($this->errorQueueUrl, $task['Body']);
-        $this->deleteMessage($this->sourceQueueUrl, $task['ReceiptHandle']);
+    public function error($job) {
+        $this->sendMessage($this->errorQueueUrl, $job['Body']);
+        $this->deleteMessage($this->sourceQueueUrl, $job['ReceiptHandle']);
         return;
     }
 
@@ -95,20 +95,20 @@ class SqsQueue implements Queue {
         return;
     }
 
-    public function stopped($task) {
-        $this->deleteMessage($this->sourceQueueUrl, $task['ReceiptHandle']);
+    public function stopped($job) {
+        $this->deleteMessage($this->sourceQueueUrl, $job['ReceiptHandle']);
         return;
     }
 
-    public function getMessageBody($task) {
-        return $task['Body'];
+    public function getMessageBody($job) {
+        return $job['Body'];
     }
 
-    public function toString($task) {
-        return json_encode($task);
+    public function toString($job) {
+        return json_encode($job);
     }
 
-    public function sendTask($task) {
-        $this->sendMessage($this->sourceQueueUrl, $task);
+    public function sendJob($job) {
+        $this->sendMessage($this->sourceQueueUrl, $job);
     }
 }

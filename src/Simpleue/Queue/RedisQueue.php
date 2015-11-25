@@ -30,20 +30,20 @@ class RedisQueue implements Queue {
         return ($queueItem !== null) ? $queueItem : false;
     }
 
-    public function successful($task) {
-        $this->redisClient->lrem($this->getProcessingQueue(), 1, $task);
+    public function successful($job) {
+        $this->redisClient->lrem($this->getProcessingQueue(), 1, $job);
         return;
     }
 
-    public function failed($task) {
-        $this->redisClient->lpush($this->getFailedQueue(), $task);
-        $this->redisClient->lrem($this->getProcessingQueue(), 1, $task);
+    public function failed($job) {
+        $this->redisClient->lpush($this->getFailedQueue(), $job);
+        $this->redisClient->lrem($this->getProcessingQueue(), 1, $job);
         return;
     }
 
-    public function error($task) {
-        $this->redisClient->lpush($this->getErrorQueue(), $task);
-        $this->redisClient->lrem($this->getProcessingQueue(), 1, $task);
+    public function error($job) {
+        $this->redisClient->lpush($this->getErrorQueue(), $job);
+        $this->redisClient->lrem($this->getProcessingQueue(), 1, $job);
         return;
     }
 
@@ -51,13 +51,13 @@ class RedisQueue implements Queue {
         $this->redisClient->ping();
     }
 
-    public function stopped($task) {
-        $this->redisClient->lrem($this->getProcessingQueue(), 1, $task);
+    public function stopped($job) {
+        $this->redisClient->lrem($this->getProcessingQueue(), 1, $job);
         return;
     }
 
-    public function getMessageBody($task) {
-        return $task;
+    public function getMessageBody($job) {
+        return $job;
     }
 
     protected function getSourceQueue() {
@@ -76,12 +76,12 @@ class RedisQueue implements Queue {
         return $this->sourceQueue . "-error";
     }
 
-    public function toString($task) {
-        return $task;
+    public function toString($job) {
+        return $job;
     }
 
-    public function sendTask($task) {
-        $this->redisClient->lpush($this->getSourceQueue(), $task);
+    public function sendJob($job) {
+        $this->redisClient->lpush($this->getSourceQueue(), $job);
     }
 
 }
