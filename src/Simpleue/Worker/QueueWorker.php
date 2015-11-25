@@ -4,10 +4,10 @@
  * Date: 9/01/15
  */
 
-namespace SimplePhpQueue\Worker;
+namespace Simpleue\Worker;
 
-use SimplePhpQueue\Queue\Queue;
-use SimplePhpQueue\Task\Task;
+use Simpleue\Queue\Queue;
+use Simpleue\Task\Task;
 use Psr\Log\LoggerInterface;
 
 class QueueWorker {

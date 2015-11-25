@@ -4,9 +4,9 @@
  * Date: 10/05/15
  */
 
-namespace SimplePhpQueue\Mocks;
+namespace Simpleue\Mocks;
 
-use SimplePhpQueue\Queue\Queue;
+use Simpleue\Queue\Queue;
 
 class QueueSpy implements Queue {
 

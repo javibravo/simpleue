@@ -4,7 +4,7 @@
  * Date: 10/05/15
  */
 
-namespace SimplePhpQueue\Mocks;
+namespace Simpleue\Mocks;
 
 use Psr\Log\LoggerInterface;
 

@@ -4,9 +4,9 @@
  * Date: 10/05/15
  */
 
-namespace SimplePhpQueue\Unitary\Queue;
+namespace Simpleue\Unitary\Queue;
 
-use SimplePhpQueue\Queue\RedisQueue;
+use Simpleue\Queue\RedisQueue;
 
 class RedisQueueTest extends \PHPUnit_Framework_TestCase {
 

@@ -4,9 +4,9 @@
  * Date: 10/05/15
  */
 
-namespace SimplePhpQueue\Mocks;
+namespace Simpleue\Mocks;
 
-use SimplePhpQueue\Task\Task;
+use Simpleue\Task\Task;
 
 class TaskSpy implements Task {
 

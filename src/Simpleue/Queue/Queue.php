@@ -4,7 +4,7 @@
  * Date: 10/05/15
  */
 
-namespace SimplePhpQueue\Queue;
+namespace Simpleue\Queue;
 
 
 interface Queue {

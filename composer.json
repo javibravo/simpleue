@@ -1,8 +1,8 @@
 {
-    "name": "javibravo/simple-php-queue",
+    "name": "javibravo/simpleue",
     "description": "Php package to manage queue tasks in a simple way",
     "keywords": ["queue", "task", "job", "redis", "sqs"],
-    "homepage": "http://github.com/javibravo/simple-php-queue",
+    "homepage": "http://github.com/javibravo/simpleue",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -16,7 +16,7 @@
         "psr/log": "~1.0"
     },
     "autoload": {
-        "psr-4": {"SimplePhpQueue\\": "src/SimplePhpQueue"}
+        "psr-4": {"Simpleue\\": "src/Simpleue"}
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*",
@@ -24,7 +24,7 @@
         "aws/aws-sdk-php": "^3.9"
     },
     "autoload-dev": {
-        "psr-4": {"SimplePhpQueue\\": "tests/SimplePhpQueue"}
+        "psr-4": {"Simpleue\\": "tests/Simpleue"}
     },
     "suggest": {
         "predis/predis": "Allow work with Redis queues",

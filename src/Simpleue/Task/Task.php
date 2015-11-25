@@ -4,7 +4,7 @@
  * Date: 10/05/15
  */
 
-namespace SimplePhpQueue\Task;
+namespace Simpleue\Task;
 
 
 interface Task {

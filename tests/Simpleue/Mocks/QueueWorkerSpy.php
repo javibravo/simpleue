@@ -4,9 +4,9 @@
  * Date: 10/05/15
  */
 
-namespace SimplePhpQueue\Mocks;
+namespace Simpleue\Mocks;
 
-use SimplePhpQueue\Worker\QueueWorker;
+use Simpleue\Worker\QueueWorker;
 
 class QueueWorkerSpy extends QueueWorker {
 
