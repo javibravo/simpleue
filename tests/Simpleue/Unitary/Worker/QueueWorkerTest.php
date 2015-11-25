@@ -8,7 +8,7 @@ namespace Simpleue\Unitary\Worker;
 
 use Simpleue\Mocks\QueueWorkerSpy;
 use Simpleue\Mocks\QueueSpy;
-use Simpleue\Mocks\TaskSpy;
+use Simpleue\Mocks\JobSpy;
 use Simpleue\Mocks\LoggerSpy;
 
 class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
@@ -21,7 +21,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         date_default_timezone_set('Europe/London');
 
         $this->sourceQueueMock = new QueueSpy();
-        $this->taskHandlerMock = new TaskSpy();
+        $this->taskHandlerMock = new JobSpy();
         $this->queueWorkerSpy = new QueueWorkerSpy($this->sourceQueueMock, $this->taskHandlerMock);
     }
 
@@ -86,7 +86,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testRunManagedFailedJobs() {
-        $this->taskHandlerMock = $this->getMock('Simpleue\Mocks\TaskSpy', array('manage'));
+        $this->taskHandlerMock = $this->getMock('Simpleue\Mocks\JobSpy', array('manage'));
         $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
         $this->taskHandlerMock->expects($this->at(1))->method('manage')->willReturn(false);
         $this->taskHandlerMock->expects($this->at(2))->method('manage')->willReturn(true);
@@ -106,7 +106,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testHandlerManageExceptions() {
-        $this->taskHandlerMock = $this->getMock('Simpleue\Mocks\TaskSpy', array('manage'));
+        $this->taskHandlerMock = $this->getMock('Simpleue\Mocks\JobSpy', array('manage'));
         $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
         $this->taskHandlerMock->expects($this->at(1))->method('manage')->willThrowException(new \Exception('Testing exceptions'));
         $this->taskHandlerMock->expects($this->at(2))->method('manage')->willReturn(false);
@@ -143,7 +143,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSourceQueueSuccessfulAndFailedExceptions() {
-        $this->taskHandlerMock = $this->getMock('Simpleue\Mocks\TaskSpy', array('manage'));
+        $this->taskHandlerMock = $this->getMock('Simpleue\Mocks\JobSpy', array('manage'));
         $this->sourceQueueMock = $this->getMock('Simpleue\Mocks\QueueSpy', array('successful', 'failed'));
         $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
         $this->sourceQueueMock->expects($this->at(0))->method('successful')->willThrowException(new \Exception('Testing exceptions'));
@@ -180,7 +180,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
 
     public function testLoggerError() {
         $loggerSpy = new LoggerSpy();
-        $this->taskHandlerMock = $this->getMock('Simpleue\Mocks\TaskSpy', array('manage'));
+        $this->taskHandlerMock = $this->getMock('Simpleue\Mocks\JobSpy', array('manage'));
         $this->taskHandlerMock->expects($this->at(0))->method('manage')->willReturn(true);
         $this->taskHandlerMock->expects($this->at(1))->method('manage')->willThrowException(new \Exception('Testing exceptions'));
         $this->taskHandlerMock->expects($this->at(2))->method('manage')->willReturn(false);

@@ -4,10 +4,10 @@
  * Date: 10/05/15
  */
 
-namespace Simpleue\Task;
+namespace Simpleue\Job;
 
 
-interface Task {
+interface Job {
     public function manage($task);
     public function mustStop($task);
 }

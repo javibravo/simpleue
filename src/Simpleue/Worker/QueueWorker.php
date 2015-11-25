@@ -7,30 +7,31 @@
 namespace Simpleue\Worker;
 
 use Simpleue\Queue\Queue;
-use Simpleue\Task\Task;
+use Simpleue\Job\Job;
 use Psr\Log\LoggerInterface;
 
 class QueueWorker {
 
-    protected $taskHandler;
+    protected $queueHandler;
+    protected $jobHandler;
     protected $iterations;
     protected $maxIterations;
     protected $logger;
 
-    function __construct(Queue $sourceQueue, Task $taskHandler, $maxIterations = false) {
-        $this->sourceQueue    = $sourceQueue;
-        $this->taskHandler    = $taskHandler;
+    function __construct(Queue $queueHandler, Job $jobHandler, $maxIterations = false) {
+        $this->queueHandler    = $queueHandler;
+        $this->jobHandler    = $jobHandler;
         $this->maxIterations  = $maxIterations;
         $this->iterations     = 0;
         $this->logger         = false;
     }
 
-    public function setSourceQueue(Queue $sourceQueue) {
-        $this->sourceQueue = $sourceQueue;
+    public function setQueueHandler(Queue $queueHandler) {
+        $this->queueHandler = $queueHandler;
     }
 
-    public function setTaskHandler(Task $taskHandler) {
-        $this->taskHandler = $taskHandler;
+    public function setJobHandler(Job $jobHandler) {
+        $this->jobHandler = $jobHandler;
     }
 
     public function setMaxIterations($maxIterations) {
@@ -48,22 +49,22 @@ class QueueWorker {
         while ($this->isRunning()) {
             $this->iterations++;
             try {
-                $task = $this->sourceQueue->getNext();
+                $job = $this->queueHandler->getNext();
             } catch (\Exception $exception) {
                 $this->log("error", "Error getting data. Message: ". $exception->getMessage());
-                $this->sourceQueue->error(FALSE, $exception);
+                $this->queueHandler->error(FALSE, $exception);
                 continue;
             }
-            if ($this->isValidTask($task) ) {
-                if ($this->taskHandler->mustStop($this->sourceQueue->getMessageBody($task))) {
-                    $this->sourceQueue->stopped($task);
+            if ($this->isValidJob($job) ) {
+                if ($this->jobHandler->mustStop($this->queueHandler->getMessageBody($job))) {
+                    $this->queueHandler->stopped($job);
                     $this->log("debug", "STOP instruction received.");
                     break;
                 }
-                $this->manageTask($task);
+                $this->manageJob($job);
             } else {
                 $this->log("debug", 'Nothing to do.');
-                $this->sourceQueue->nothingToDo();
+                $this->queueHandler->nothingToDo();
             }
         }
         $this->log("debug", "Queue Worker finished.");
@@ -85,23 +86,23 @@ class QueueWorker {
         return TRUE;
     }
 
-    protected function isValidTask($task) {
-        return ($task !== FALSE);
+    protected function isValidJob($job) {
+        return ($job !== FALSE);
     }
 
-    private function manageTask($task) {
+    private function manageJob($job) {
         try {
-            $jobDone = $this->taskHandler->manage($this->sourceQueue->getMessageBody($task));
+            $jobDone = $this->jobHandler->manage($this->queueHandler->getMessageBody($job));
             if ($jobDone) {
-                $this->log("debug", "Successful Job: " . $this->sourceQueue->toString($task));
-                $this->sourceQueue->successful($task);
+                $this->log("debug", "Successful Job: " . $this->queueHandler->toString($job));
+                $this->queueHandler->successful($job);
             } else {
-                $this->log("debug", "Failed Job:" . $this->sourceQueue->toString($task));
-                $this->sourceQueue->failed($task);
+                $this->log("debug", "Failed Job:" . $this->queueHandler->toString($job));
+                $this->queueHandler->failed($job);
             }
         } catch (\Exception $exception) {
-            $this->log("error", "Error Managing data. Data :" . $this->sourceQueue->toString($task) . ". Message: " . $exception->getMessage());
-            $this->sourceQueue->error($task, $exception);
+            $this->log("error", "Error Managing data. Data :" . $this->queueHandler->toString($job) . ". Message: " . $exception->getMessage());
+            $this->queueHandler->error($job, $exception);
         }
     }
 
