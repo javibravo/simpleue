@@ -1,9 +1,9 @@
-SimplePHPQueue
-==============
+Simpleue - Simple Queue Worker for PHP
+======================================
 
-[![Build Status](https://travis-ci.org/javibravo/simple-php-queue.svg?branch=master)](https://travis-ci.org/javibravo/simple-php-queue)
+[![Build Status](https://travis-ci.org/javibravo/simpleue.svg?branch=master)](https://travis-ci.org/javibravo/simpleue)
 
-SimplePHPQueue provide a very simple way to run workers to consume queues (consumers).
+Simpleue provide a very simple way to run workers to consume queues (consumers) in PHP.
 The library have been developed to be easily extended to work with different queue servers and
 open to manage any kind of tasks.
 
@@ -12,7 +12,7 @@ Current implementations:
    - **Redis** queue adapter.
    - **AWS SQS** queue adapter. 
 
-You can find an example of use in [simple-php-queue-example](https://github.com/javibravo/simple-php-queue-example)
+You can find an example of use in [simpleue-example](https://github.com/javibravo/simpleue-example)
 
 Worker
 ------
@@ -79,7 +79,7 @@ Require the package in your composer json file:
 {
 
     "require": {
-        "javibravo/simple-php-queue" : "dev-master",
+        "javibravo/simpleue" : "dev-master",
     },
 
 }
@@ -95,7 +95,7 @@ The first step is to define and implement the task to be managed.
 
 namespace MyProject\MyTask;
 
-use SimplePhpQueue\Task\Task;
+use Simpleue\Task\Task;
 
 class MyTask implements  Task {
 
@@ -131,8 +131,8 @@ Once the task is defined we can define our consumer and start running:
 <?php
 
 use Predis\Client;
-use SimplePhpQueue\Queue\RedisQueue;
-use SimplePhpQueue\Worker\QueueWorker;
+use Simpleue\Queue\RedisQueue;
+use Simpleue\Worker\QueueWorker;
 use MyProject\MyTask;
 
 $redisQueue = new RedisQueue(
@@ -149,8 +149,8 @@ $myNewConsumer->start();
 <?php
 
 use Aws\Sqs\SqsClient;
-use SimplePhpQueue\Queue\AwsSqsQueue;
-use SimplePhpQueue\Worker\QueueWorker;
+use Simpleue\Queue\AwsSqsQueue;
+use Simpleue\Worker\QueueWorker;
 use MyProject\MyTask;
 
 $sqsClient = new SqsClient([
