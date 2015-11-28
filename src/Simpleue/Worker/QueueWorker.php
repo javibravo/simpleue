@@ -56,7 +56,7 @@ class QueueWorker {
                 continue;
             }
             if ($this->isValidJob($job) ) {
-                if ($this->jobHandler->mustStop($this->queueHandler->getMessageBody($job))) {
+                if ($this->jobHandler->isStopJob($this->queueHandler->getMessageBody($job))) {
                     $this->queueHandler->stopped($job);
                     $this->log("debug", "STOP instruction received.");
                     break;

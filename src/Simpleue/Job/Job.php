@@ -9,5 +9,5 @@ namespace Simpleue\Job;
 
 interface Job {
     public function manage($job);
-    public function mustStop($job);
+    public function isStopJob($job);
 }

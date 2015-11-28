@@ -21,7 +21,7 @@ class JobSpy implements Job {
         return true;
     }
 
-    public function mustStop($job) {
+    public function isStopJob($job) {
         return ($job === 'STOP');
     }
 
