@@ -28,6 +28,18 @@ class SqsQueue implements Queue {
         $this->setQueues($queueName);
     }
 
+    public function setSourceQueueUrl($queueUrl) {
+        $this->sourceQueueUrl = $queueUrl;
+    }
+
+    public function setFailedQueueUrl($queueUrl) {
+        $this->failedQueueUrl = $queueUrl;
+    }
+
+    public function setErrorQueueUrl($queueUrl) {
+        $this->errorQueueUrl = $queueUrl;
+    }
+
     protected function setQueues($queueName) {
         $this->sourceQueueUrl = $this->getQueueUrl($queueName);
         $this->failedQueueUrl = $this->getQueueUrl($queueName.'-failed');
