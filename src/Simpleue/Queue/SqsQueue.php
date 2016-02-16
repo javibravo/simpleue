@@ -28,6 +28,14 @@ class SqsQueue implements Queue {
         $this->setQueues($queueName);
     }
 
+    public function setVisibilityTimeout($visibilityTimeout) {
+        $this->visibilityTimeout = $visibilityTimeout;
+    }
+
+    public function setMaxWaitingSeconds($maxWaitingSeconds) {
+        $this->maxWaitingSeconds = $maxWaitingSeconds;
+    }
+
     public function setSourceQueueUrl($queueUrl) {
         $this->sourceQueueUrl = $queueUrl;
     }
