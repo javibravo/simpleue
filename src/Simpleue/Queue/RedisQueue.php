@@ -22,7 +22,17 @@ class RedisQueue implements Queue {
 
     public function setRedisClient(Client $redisClient) {
         $this->redisClient = $redisClient;
-        return;
+        return $this;
+    }
+
+    public function setQueueName($queueName) {
+        $this->sourceQueue = $queueName;
+        return $this;
+    }
+
+    public function setMaxWaitingSeconds($maxWaitingSeconds) {
+        $this->maxWaitingSeconds = $maxWaitingSeconds;
+        return $this;
     }
 
     public function getNext() {
