@@ -28,18 +28,22 @@ class QueueWorker {
 
     public function setQueueHandler(Queue $queueHandler) {
         $this->queueHandler = $queueHandler;
+        return $this;
     }
 
     public function setJobHandler(Job $jobHandler) {
         $this->jobHandler = $jobHandler;
+        return $this;
     }
 
     public function setMaxIterations($maxIterations) {
         $this->maxIterations = $maxIterations;
+        return $this;
     }
 
     public function setLogger(LoggerInterface $logger) {
         $this->logger = $logger;
+        return $this;
     }
 
     public function start() {
