@@ -10,7 +10,8 @@ open to manage any kind of job.
 Current implementations:
 
    - **Redis** queue adapter.
-   - **AWS SQS** queue adapter. 
+   - **AWS SQS** queue adapter.
+   - **Beanstalkd** queue adapter.
 
 You can find an example of use in [simpleue-example](https://github.com/javibravo/simpleue-example)
 
@@ -43,6 +44,7 @@ servers. Currently the lib provide following implementations:
 
    - **Redis** queue adapter.
    - **AWS SQS** queue adapter. 
+   - **Beanstalkd** queue adapter.
 
 The queue interface manage all related with the queue system and abstract the job about that.
 
@@ -50,6 +52,7 @@ It require the queue system client:
 
    - Redis : Predis\Client
    - AWS SQS : Aws\Sqs\SqsClient
+   - Beanstalkd : Pheanstalk\Pheanstalk;
 
 And was well the source *queue name*. The consumer will need additional queues to manage the process:
 
@@ -112,7 +115,7 @@ class MyJob implements Job {
 
     ...
     
-    public function mustStop($job) {
+    public function isStopJob($job) {
         if ( ... )
             return TRUE;
         return FALSE;
@@ -149,7 +152,7 @@ $myNewConsumer->start();
 <?php
 
 use Aws\Sqs\SqsClient;
-use Simpleue\Queue\AwsSqsQueue;
+use Simpleue\Queue\SqsQueue;
 use Simpleue\Worker\QueueWorker;
 use MyProject\MyJob;
 
@@ -159,9 +162,27 @@ $sqsClient = new SqsClient([
     'version' => 'latest'
 ]);
 
-$sqsQueue = new AwsSqsQueue($sqsClient, 'my_queue_name');
+$sqsQueue = new SqsQueue($sqsClient, 'my_queue_name');
 
 $myNewConsumer = new QueueWorker($sqsQueue, new MyJob());
+$myNewConsumer->start();
+```
+
+** Beanstalkd Consumer**
+
+```php
+<?php
+
+use Simpleue\Queue\BeanStalkdQueue;
+use Simpleue\Worker\QueueWorker;
+use Pheanstalk\Pheanstalk;
+use MyProject\MyJob;
+
+$beanStalkdClient = new Pheanstalk('localhost');
+
+$beanStalkdQueue = new BeanStalkdQueue($beanStalkdClient, 'my_queue_name');
+
+$myNewConsumer = new QueueWorker($beanStalkdQueue, new MyJob());
 $myNewConsumer->start();
 ```
 
