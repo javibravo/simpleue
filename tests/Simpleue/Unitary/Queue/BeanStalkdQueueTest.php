@@ -20,7 +20,7 @@ class BeanStalkdQueueTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->beanStalkdClientMock = $this->getMockBuilder('Pheanstalk\Pheanstalk')->disableOriginalConstructor()
-            ->setMethods(['put', 'delete', 'useTube', 'reserve', 'putInTube'])->getMock();
+            ->setMethods(['put', 'delete', 'useTube', 'reserve', 'putInTube', 'watch'])->getMock();
         $this->testQueueName = 'queue-test';
         $this->beanStalkdQueue = new BeanStalkdQueue($this->beanStalkdClientMock, $this->testQueueName);
     }
@@ -28,6 +28,7 @@ class BeanStalkdQueueTest extends \PHPUnit_Framework_TestCase
     public function testGetNext()
     {
         $returnExample = new Job(1, '{string: example}');
+        $this->beanStalkdClientMock->expects($this->once())->method('watch')->willReturnSelf();
         $this->beanStalkdClientMock->expects($this->once())->method('reserve')->willReturn($returnExample);
         $this->assertEquals($returnExample->getData(), $this->beanStalkdQueue->getNext()->getData());
     }

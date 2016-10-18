@@ -34,8 +34,8 @@ class BeanStalkdQueue implements Queue
 
     public function getNext()
     {
-        $this->beanStalkdClient->useTube($this->sourceQueue);
-        return $this->beanStalkdClient->reserve();
+        $this->beanStalkdClient->watch($this->sourceQueue);
+        return $this->beanStalkdClient->reserve(0);
     }
 
     public function successful($job)
