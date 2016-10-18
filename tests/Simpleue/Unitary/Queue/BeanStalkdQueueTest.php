@@ -70,4 +70,11 @@ class BeanStalkdQueueTest extends \PHPUnit_Framework_TestCase
         $this->beanStalkdClientMock->expects($this->once())->method('delete')->with($job);
         $this->beanStalkdQueue->stopped($job);
     }
+
+    public function testSendJob()
+    {
+        $job = '{data:sample}';
+        $this->beanStalkdClientMock->expects($this->once())->method('putInTube')->with($this->testQueueName, $job);
+        $this->beanStalkdQueue->sendJob($job);
+    }
 }
