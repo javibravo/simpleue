@@ -94,7 +94,7 @@ class BeanStalkdQueue implements Queue
     }
 
     /**
-     * @param $job Job
+     * @param $job string
      * @return int
      */
     public function sendJob($job)
