@@ -168,7 +168,7 @@ $myNewConsumer = new QueueWorker($sqsQueue, new MyJob());
 $myNewConsumer->start();
 ```
 
-** Beanstalkd Consumer**
+**Beanstalkd Consumer**
 
 ```php
 <?php
