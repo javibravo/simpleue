@@ -21,7 +21,7 @@ class QueueWorker
     {
         $this->queueHandler = $queueHandler;
         $this->jobHandler = $jobHandler;
-        $this->maxIterations = $maxIterations;
+        $this->maxIterations = (int) $maxIterations;
         $this->iterations = 0;
         $this->logger = false;
     }
@@ -42,7 +42,7 @@ class QueueWorker
 
     public function setMaxIterations($maxIterations)
     {
-        $this->maxIterations = $maxIterations;
+        $this->maxIterations = (int) $maxIterations;
 
         return $this;
     }
@@ -98,7 +98,7 @@ class QueueWorker
 
     protected function isRunning()
     {
-        if ((int) $this->maxIterations > 0) {
+        if ($this->maxIterations > 0) {
             return $this->iterations < $this->maxIterations;
         }
 
