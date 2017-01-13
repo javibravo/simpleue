@@ -2,6 +2,8 @@ Simpleue - Simple Queue Worker for PHP
 ======================================
 
 [![Build Status](https://travis-ci.org/javibravo/simpleue.svg?branch=master)](https://travis-ci.org/javibravo/simpleue)
+[![Total Downloads](https://img.shields.io/packagist/dt/javibravo/simpleue.svg)](https://packagist.org/packages/javibravo/simpleue)
+[![Latest Stable Version](https://img.shields.io/packagist/v/javibravo/simpleue.svg)](https://packagist.org/packages/javibravo/simpleue)
 
 Simpleue provide a very simple way to run workers to consume queues (consumers) in PHP.
 The library have been developed to be easily extended to work with different queue servers and
