@@ -16,7 +16,6 @@ class QueueWorker
     protected $iterations;
     protected $maxIterations;
     protected $logger;
-    protected $handleSignals;
     protected $terminated;
 
     public function __construct(Queue $queueHandler, Job $jobHandler, $maxIterations = 0, $handleSignals = false)
@@ -26,16 +25,10 @@ class QueueWorker
         $this->maxIterations = (int) $maxIterations;
         $this->iterations = 0;
         $this->logger = false;
-        $this->handleSignals = $handleSignals;
         $this->terminated = false;
 
-        if ($handleSignals && !function_exists('pcntl_signal')) {
-            $this->log(
-                'error',
-                'Please make sure that \'pcntl\' is enabled if you want us to handle signals'
-            );
-
-            throw new \Exception('Please make sure that \'pcntl\' is enabled if you want us to handle signals');
+        if ($handleSignals) {
+            $this->handleSignals();
         }
     }
 
@@ -106,10 +99,6 @@ class QueueWorker
 
     protected function starting()
     {
-        if ($this->handleSignals) {
-            $this->handleSignals();
-        }
-
         return true;
     }
 
@@ -133,6 +122,15 @@ class QueueWorker
 
     protected function handleSignals()
     {
+        if (!function_exists('pcntl_signal')) {
+            $this->log(
+                'error',
+                'Please make sure that \'pcntl\' is enabled if you want us to handle signals'
+            );
+
+            throw new \Exception('Please make sure that \'pcntl\' is enabled if you want us to handle signals');
+        }
+
         declare(ticks = 1);
         pcntl_signal(SIGTERM, [$this, 'terminate']);
         pcntl_signal(SIGINT,  [$this, 'terminate']);
