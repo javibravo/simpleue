@@ -38,6 +38,15 @@ The loop can be **stopped** under control using the following methods:
 Each worker has one queue source and manage one type of jobs. Many workers
 can be working concurrently using the same queue source.
 
+### Graceful Exit
+
+The worker is also capable for handling some posix signals, *viz.* `SIGINT` and `SIGTERM` so
+ that it exits gracefully (waits for the current queue job to complete) when someone tries to
+ manually stop it (usually with a `C-c` keystroke in a shell).
+ 
+This behaviour is disabled by default. To enable it, you need to pass an extra parameter
+in the constructor of the worker class. See Usage below for an example.
+
 Queue
 -----
 
@@ -186,6 +195,32 @@ $beanStalkdQueue = new BeanStalkdQueue($beanStalkdClient, 'my_queue_name');
 
 $myNewConsumer = new QueueWorker($beanStalkdQueue, new MyJob());
 $myNewConsumer->start();
+```
+
+**Using maxIterations**
+
+There are two ways you can set maximum iterations, both are shown below:
+
+Using Setter Method
+```php
+$myConsumer = new QueueWorker($myQueue, new MyJob());
+$myConsumer->setMaxIterations(10); //any number
+$myConsumer->start();
+```
+
+Using Constructor Parameter
+```php
+$myConsumer = new QueueWorker($myQueue, new MyJob(), 10);
+$myConsumer->start();
+```
+
+**Enabling Graceful Exit**
+
+To enable graceful exit, pass in an extra parameter in the constructor.
+
+```php
+$myConsumer = new QueueWorker($myQueue, new MyJob(), 10, true);
+$myConsumer->start();
 ```
 
 (*) The idea is to support any queue system, so it is open for that. Contributions are welcome.
