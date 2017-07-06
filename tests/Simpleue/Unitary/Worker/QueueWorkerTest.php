@@ -164,6 +164,32 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(8, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
     }
 
+    public function testWorkerExitsGracefullyOnSigINT() {
+        if (!function_exists('pcntl_signal')) {
+            $this->markTestSkipped('Enable pcntl_* extension to run this test');
+        }
+
+        $this->jobHandlerMock->setQuitCount(3);
+        $this->jobHandlerMock->setSignalToTest(SIGINT);
+        $this->queueWorkerSpy = new QueueWorkerSpy($this->sourceQueueMock, $this->jobHandlerMock, 10, true);
+        $this->queueWorkerSpy->start();
+        $this->assertEquals(3, $this->queueWorkerSpy->getIterations());
+        $this->assertEquals(3, $this->jobHandlerMock->getmanageCounter());
+    }
+
+    public function testWorkerExitsGracefullyOnSigTERM() {
+        if (!function_exists('pcntl_signal')) {
+            $this->markTestSkipped('Enable pcntl_* extension to run this test');
+        }
+
+        $this->jobHandlerMock->setQuitCount(8);
+        $this->jobHandlerMock->setSignalToTest(SIGTERM);
+        $this->queueWorkerSpy = new QueueWorkerSpy($this->sourceQueueMock, $this->jobHandlerMock, 10, true);
+        $this->queueWorkerSpy->start();
+        $this->assertEquals(8, $this->queueWorkerSpy->getIterations());
+        $this->assertEquals(8, $this->jobHandlerMock->getmanageCounter());
+    }
+
     public function testLoggerDebug() {
         $loggerSpy = new LoggerSpy();
         $this->queueWorkerSpy->setMaxIterations(1);

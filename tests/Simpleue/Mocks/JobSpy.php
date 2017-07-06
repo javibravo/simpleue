@@ -11,12 +11,18 @@ use Simpleue\Job\Job;
 class JobSpy implements Job {
 
     private $manageCounter;
+    private $quitCount;
+    private $testSignal;
 
     public function _construct() {
         $this->manageCounter = 0;
     }
 
     public function manage($job) {
+        if ($this->quitCount && (($this->manageCounter+1) === $this->quitCount)) {
+            posix_kill(posix_getpid(), $this->testSignal);
+        }
+
         $this->manageCounter++;
         return true;
     }
@@ -25,4 +31,15 @@ class JobSpy implements Job {
         return ($job === 'STOP');
     }
 
+    public function setQuitCount($num) {
+        $this->quitCount = $num;
+    }
+
+    public function setSignalToTest($sig) {
+        $this->testSignal = $sig;
+    }
+
+    public function getManageCounter() {
+        return $this->manageCounter;
+    }
 }
