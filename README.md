@@ -47,6 +47,9 @@ The worker is also capable for handling some posix signals, *viz.* `SIGINT` and 
 This behaviour is disabled by default. To enable it, you need to pass an extra parameter
 in the constructor of the worker class. See Usage below for an example.
 
+**Note: This feature is not tested in HHVM, thus might not work as expected if you are running
+it on HHVM**
+
 Queue
 -----
 

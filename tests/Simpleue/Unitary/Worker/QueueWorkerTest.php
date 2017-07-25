@@ -169,6 +169,10 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
             $this->markTestSkipped('Enable pcntl_* extension to run this test');
         }
 
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('The Graceful Exit feature does not work for HHVM');
+        }
+
         $this->jobHandlerMock->setQuitCount(3);
         $this->jobHandlerMock->setSignalToTest(SIGINT);
         $this->queueWorkerSpy = new QueueWorkerSpy($this->sourceQueueMock, $this->jobHandlerMock, 10, true);
@@ -180,6 +184,10 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
     public function testWorkerExitsGracefullyOnSigTERM() {
         if (!function_exists('pcntl_signal')) {
             $this->markTestSkipped('Enable pcntl_* extension to run this test');
+        }
+
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('The Graceful Exit feature does not work for HHVM');
         }
 
         $this->jobHandlerMock->setQuitCount(8);
