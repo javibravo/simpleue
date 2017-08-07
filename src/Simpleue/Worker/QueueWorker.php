@@ -16,14 +16,20 @@ class QueueWorker
     protected $iterations;
     protected $maxIterations;
     protected $logger;
+    protected $terminated;
 
-    public function __construct(Queue $queueHandler, Job $jobHandler, $maxIterations = 0)
+    public function __construct(Queue $queueHandler, Job $jobHandler, $maxIterations = 0, $handleSignals = false)
     {
         $this->queueHandler = $queueHandler;
         $this->jobHandler = $jobHandler;
         $this->maxIterations = (int) $maxIterations;
         $this->iterations = 0;
         $this->logger = false;
+        $this->terminated = false;
+
+        if ($handleSignals) {
+            $this->handleSignals();
+        }
     }
 
     public function setQueueHandler(Queue $queueHandler)
@@ -98,6 +104,10 @@ class QueueWorker
 
     protected function isRunning()
     {
+        if ($this->terminated) {
+            return false;
+        }
+
         if ($this->maxIterations > 0) {
             return $this->iterations < $this->maxIterations;
         }
@@ -108,6 +118,30 @@ class QueueWorker
     protected function isValidJob($job)
     {
         return $job !== false;
+    }
+
+    protected function handleSignals()
+    {
+        if (!function_exists('pcntl_signal')) {
+            $this->log(
+                'error',
+                'Please make sure that \'pcntl\' is enabled if you want us to handle signals'
+            );
+
+            throw new \Exception('Please make sure that \'pcntl\' is enabled if you want us to handle signals');
+        }
+
+        declare(ticks = 1);
+        pcntl_signal(SIGTERM, [$this, 'terminate']);
+        pcntl_signal(SIGINT,  [$this, 'terminate']);
+
+        $this->log('debug', 'Finished Setting up Handler for signals SIGTERM and SIGINT');
+    }
+
+    protected function terminate()
+    {
+        $this->log('debug', 'Caught signals. Trying a Graceful Exit');
+        $this->terminated = true;
     }
 
     private function manageJob($job)
