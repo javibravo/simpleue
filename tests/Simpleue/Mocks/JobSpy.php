@@ -31,7 +31,7 @@ class JobSpy implements Job {
         return ($job === 'STOP');
     }
 
-    public function isValidJob($job) {
+    public function isMyJob($job) {
         return ($job !== false);
     }
 
