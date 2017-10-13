@@ -77,8 +77,6 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->jobHandlerMock->expects($this->at(0))->method('isValidJob')->willReturn(true);
         $this->jobHandlerMock->expects($this->at(1))->method('isValidJob')->willReturn(false);
         $this->jobHandlerMock->expects($this->at(2))->method('isValidJob')->willReturn(true);
-        $this->jobHandlerMock->expects($this->at(3))->method('isValidJob')->willReturn(true);
-        $this->jobHandlerMock->expects($this->at(4))->method('isValidJob')->willReturn(true);
 
         $this->queueWorkerSpy = new QueueWorkerSpy($this->sourceQueueMock, $this->jobHandlerMock);
         $this->queueWorkerSpy->setMaxIterations(5);
