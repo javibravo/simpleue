@@ -89,7 +89,7 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(0, $this->sourceQueueMock->errorCounter, 'Error counter');
         $this->assertEquals(3, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
         $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management counter');
-        $this->assertEquals(6, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
+        $this->assertEquals(4, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
     }
 
     public function testRunManagedFailedJobs() {
