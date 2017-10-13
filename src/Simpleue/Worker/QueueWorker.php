@@ -117,7 +117,7 @@ class QueueWorker
 
     protected function isValidJob($job)
     {
-        return $job !== false;
+        return $job !== false && $this->jobHandler->isValidJob($job);
     }
 
     protected function handleSignals()

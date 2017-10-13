@@ -73,14 +73,21 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->sourceQueueMock->expects($this->at(3))->method('getNext')->willReturn(0);
         $this->sourceQueueMock->expects($this->at(4))->method('getNext')->willReturn('');
 
+        $this->jobHandlerMock = $this->getMock('Simpleue\Mocks\JobSpy', array('isValidJob'));
+        $this->jobHandlerMock->expects($this->at(0))->method('isValidJob')->willReturn(true);
+        $this->jobHandlerMock->expects($this->at(1))->method('isValidJob')->willReturn(false);
+        $this->jobHandlerMock->expects($this->at(2))->method('isValidJob')->willReturn(true);
+        $this->jobHandlerMock->expects($this->at(3))->method('isValidJob')->willReturn(true);
+        $this->jobHandlerMock->expects($this->at(4))->method('isValidJob')->willReturn(true);
+
         $this->queueWorkerSpy = new QueueWorkerSpy($this->sourceQueueMock, $this->jobHandlerMock);
         $this->queueWorkerSpy->setMaxIterations(5);
         $this->queueWorkerSpy->start();
         $this->assertEquals(5, $this->queueWorkerSpy->getIterations());
-        $this->assertEquals(3, $this->sourceQueueMock->successfulCounter, 'Successful counter');
+        $this->assertEquals(2, $this->sourceQueueMock->successfulCounter, 'Successful counter');
         $this->assertEquals(0, $this->sourceQueueMock->failedCounter, 'Failed counter');
         $this->assertEquals(0, $this->sourceQueueMock->errorCounter, 'Error counter');
-        $this->assertEquals(2, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
+        $this->assertEquals(3, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
         $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management counter');
         $this->assertEquals(6, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
     }

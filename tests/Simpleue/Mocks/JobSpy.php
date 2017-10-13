@@ -31,6 +31,10 @@ class JobSpy implements Job {
         return ($job === 'STOP');
     }
 
+    public function isValidJob($job) {
+        return ($job !== false);
+    }
+
     public function setQuitCount($num) {
         $this->quitCount = $num;
     }
