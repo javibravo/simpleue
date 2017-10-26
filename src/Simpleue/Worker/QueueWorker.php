@@ -74,7 +74,7 @@ class QueueWorker
                 $this->queueHandler->error(false, $exception);
                 continue;
             }
-            if ($this->isValidJob($job)) {
+            if ($this->isValidJob($job) && $this->jobHandler->isMyJob($this->queueHandler->getMessageBody($job))) {
                 if ($this->jobHandler->isStopJob($this->queueHandler->getMessageBody($job))) {
                     $this->queueHandler->stopped($job);
                     $this->log('debug', 'STOP instruction received.');

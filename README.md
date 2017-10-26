@@ -85,7 +85,10 @@ The job interface is used to manage the job received in the queue. It must manag
 business logic and **define the STOP job**.
 
 The job is abstracted form the queue system, so the same job definition is able to work with
-different queues interfaces. The job always receive the message body from the queue,
+different queues interfaces. The job always receive the message body from the queue.
+
+If you have different job types ( send mail, crop images, etc. ) and you use one queue, you can define **isMyJob**. 
+If job is not expected type, you can send back job to queue.
 
 Install
 -------
@@ -135,6 +138,11 @@ class MyJob implements Job {
         return FALSE;
     }
     
+    public function isMyJob($job) {
+            if ( ... )
+                return TRUE;
+            return FALSE;
+    }
     ...
 
 }
