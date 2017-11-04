@@ -70,4 +70,35 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase {
         $this->sqsQueue->stopped($job);
     }
 
+    public function testGetNextLocked()
+    {
+        $data = '{data:sample}';
+        $ReceipHandle = 'MyReceiptHandler';
+        $job = ['Body' => $data, 'ReceiptHandle' => $ReceipHandle];
+
+        $redisLockerMock = $this->getMock(
+            'Simpleue\Locker\RedisLocker',
+            array('lock', 'getJobUniqId', 'getLockerInfo'),
+            array(),
+            '',
+            false
+        );
+        $redisLockerMock->expects($this->at(0))->method('lock')->willReturn(false);
+        $redisLockerMock->expects($this->at(1))->method('getJobUniqId')->willReturn('uniqid');
+        $redisLockerMock->expects($this->at(2))->method('getLockerInfo')->willReturn('info');
+        $this->sqsQueue->setLocker($redisLockerMock);
+
+        $result = new Result(['Messages' => [$job]]);
+        $this->sqsClientMock->expects($this->once())->method('receiveMessage')->willReturn($result);
+        $this->sqsClientMock->expects($this->once())->method('sendMessage')->with(['QueueUrl' => 'queue-url-error', 'MessageBody' => $data]);
+        $this->sqsClientMock->expects($this->once())->method('deleteMessage')->with(['QueueUrl' => 'queue-url-source', 'ReceiptHandle' => $ReceipHandle]);
+        $this->setExpectedException(
+            'RuntimeException',
+            'Sqs msg lock cannot acquired!'
+            .' LockId: uniqid'
+            .' LockerInfo: info'
+        );
+        $this->sqsQueue->getNext($job);
+    }
+
 }
