@@ -25,6 +25,7 @@ matrix:
     - php: nightly
 
 before_script:
+  - phpenv config-add php-extensions.ini
   - composer install
 
 script: ./vendor/bin/phpunit
