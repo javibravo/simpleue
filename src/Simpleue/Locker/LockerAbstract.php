@@ -5,6 +5,7 @@ namespace Simpleue\Locker;
 abstract class LockerAbstract implements LockerInterface
 {
     protected $uniqIdFunction;
+    protected $keyPrefix = 'sqslocker-';
 
     public function __construct()
     {
@@ -22,7 +23,7 @@ abstract class LockerAbstract implements LockerInterface
     {
         if ($this->uniqIdFunction) {
             $func = $this->uniqIdFunction;
-            return $func($job);
+            return $this->keyPrefix . $func($job);
         } else {
             throw new \InvalidArgumentException('Locker::uniqIdFunction not defined!');
         }

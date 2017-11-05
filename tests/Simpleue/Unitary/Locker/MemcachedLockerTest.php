@@ -29,14 +29,14 @@ class MemcachedLockerTest extends \PHPUnit_Framework_TestCase
     {
         $job = '{"string": "example", "uniqid":"123"}';
         $this->assertEquals(
-            md5(strtolower($job)),
+            'sqslocker-'.md5(strtolower($job)),
             $this->memcachedLocker->getJobUniqId($job)
         );
         $this->memcachedLocker->setJobUniqIdFunction(function ($job) {
             return json_decode($job, true)['uniqid'];
         });
         $this->assertEquals(
-            '123',
+            'sqslocker-123',
             $this->memcachedLocker->getJobUniqId($job)
         );
     }
