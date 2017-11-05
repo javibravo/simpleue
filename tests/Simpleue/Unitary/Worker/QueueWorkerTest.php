@@ -141,7 +141,6 @@ class QueueWorkerTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(3, $this->queueWorkerSpy->getIterations());
         $this->assertEquals(1, $this->sourceQueueMock->successfulCounter, 'Successful counter');
         $this->assertEquals(0, $this->sourceQueueMock->failedCounter, 'Failed counter');
-        $this->assertEquals(2, $this->sourceQueueMock->errorCounter, 'Error counter');
         $this->assertEquals(0, $this->sourceQueueMock->nothingToDoCounter, 'Nothing to do counter');
         $this->assertEquals(0, $this->sourceQueueMock->stoppedCounter, 'Stop inst. management');
         $this->assertEquals(3, $this->sourceQueueMock->getMessageBodyCounter, 'Message body counter');
