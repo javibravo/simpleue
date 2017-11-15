@@ -71,7 +71,6 @@ class QueueWorker
                 $job = $this->queueHandler->getNext();
             } catch (\Exception $exception) {
                 $this->log('error', 'Error getting data. Message: '.$exception->getMessage());
-                $this->queueHandler->error(false, $exception);
                 continue;
             }
             if ($this->isValidJob($job) && $this->jobHandler->isMyJob($this->queueHandler->getMessageBody($job))) {
@@ -157,7 +156,7 @@ class QueueWorker
             }
         } catch (\Exception $exception) {
             $this->log('error', 'Error Managing data. Data :'.$this->queueHandler->toString($job).'. Message: '.$exception->getMessage());
-            $this->queueHandler->error($job, $exception);
+            $this->queueHandler->error($job);
         }
     }
 

@@ -8,6 +8,7 @@ namespace Simpleue\Queue;
 
 use Aws\Sqs\Exception\SqsException;
 use Aws\Sqs\SqsClient;
+use Simpleue\Locker\BaseLocker;
 
 /*
  * AWS API 3.x doc : http://docs.aws.amazon.com/aws-sdk-php/v3/api/
@@ -20,6 +21,10 @@ class SqsQueue implements Queue {
     private $errorQueueUrl;
     private $maxWaitingSeconds;
     private $visibilityTimeout;
+    /**
+     * @var BaseLocker
+     */
+    private $locker;
 
     public function __construct(SqsClient $sqsClient, $queueName, $maxWaitingSeconds = 20, $visibilityTimeout = 30) {
         $this->sqsClient = $sqsClient;
@@ -73,6 +78,14 @@ class SqsQueue implements Queue {
         return $this;
     }
 
+    /**
+     * @param BaseLocker $locker
+     */
+    public function setLocker($locker)
+    {
+        $this->locker = $locker;
+    }
+
     public function getNext() {
         $queueItem = $this->sqsClient->receiveMessage([
             'QueueUrl' => $this->sourceQueueUrl,
@@ -81,7 +94,16 @@ class SqsQueue implements Queue {
             'VisibilityTimeout' => $this->visibilityTimeout
         ]);
         if ($queueItem->hasKey('Messages')) {
-            return $queueItem->get('Messages')[0];
+            $msg = $queueItem->get('Messages')[0];
+            if ($this->locker && $this->locker->lock($this->getMessageBody($msg), $this->visibilityTimeout)===false) {
+                $this->error($msg);
+                throw new \RuntimeException(
+                    'Sqs msg lock cannot acquired!'
+                    .' LockId: ' . $this->locker->getJobUniqId($this->getMessageBody($msg))
+                    .' LockerInfo: ' . $this->locker->getLockerInfo()
+                );
+            }
+            return $msg;
         }
         return false;
     }

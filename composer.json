@@ -29,6 +29,7 @@
     },
     "suggest": {
         "predis/predis": "Allow work with Redis queues",
+        "ext-redis": "Allow work with Redis Locker",
         "aws/aws-sdk-php": "Allow work with AWS Simple Queue Service (SQS) queues",
         "pda/pheanstalk": "Allow work with Beanstalkd queues"
     }
