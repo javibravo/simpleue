@@ -8,7 +8,7 @@ namespace Simpleue\Queue;
 
 use Aws\Sqs\Exception\SqsException;
 use Aws\Sqs\SqsClient;
-use Simpleue\Locker\LockerAbstract;
+use Simpleue\Locker\BaseLocker;
 
 /*
  * AWS API 3.x doc : http://docs.aws.amazon.com/aws-sdk-php/v3/api/
@@ -22,7 +22,7 @@ class SqsQueue implements Queue {
     private $maxWaitingSeconds;
     private $visibilityTimeout;
     /**
-     * @var LockerAbstract
+     * @var BaseLocker
      */
     private $locker;
 
@@ -79,7 +79,7 @@ class SqsQueue implements Queue {
     }
 
     /**
-     * @param LockerAbstract $locker
+     * @param BaseLocker $locker
      */
     public function setLocker($locker)
     {

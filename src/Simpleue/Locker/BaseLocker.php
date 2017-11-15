@@ -2,7 +2,7 @@
 
 namespace Simpleue\Locker;
 
-abstract class LockerAbstract implements LockerInterface
+abstract class BaseLocker implements Locker
 {
     protected $uniqIdFunction;
     protected $keyPrefix = 'sqslocker-';

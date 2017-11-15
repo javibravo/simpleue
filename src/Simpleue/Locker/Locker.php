@@ -2,7 +2,7 @@
 
 namespace Simpleue\Locker;
 
-interface LockerInterface
+interface Locker
 {
     public function getLockerInfo();
     public function lock($job, $timeout = 40);

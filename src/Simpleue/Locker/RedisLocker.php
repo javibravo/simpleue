@@ -2,7 +2,7 @@
 
 namespace Simpleue\Locker;
 
-class RedisLocker extends LockerAbstract
+class RedisLocker extends BaseLocker
 {
     /**
      * @var \Redis;
@@ -44,11 +44,11 @@ class RedisLocker extends LockerAbstract
         }
 
         $currentLockTimestamp = $this->redis->get($key);
-        if ($currentLockTimestamp>time()) {
+        if ($currentLockTimestamp > time()) {
             return false;
         }
         $oldLockTimestamp = $this->redis->getSet($key, (time() + $timeout + 1));
-        if ($oldLockTimestamp>time()) {
+        if ($oldLockTimestamp > time()) {
             return false;
         }
         return true;

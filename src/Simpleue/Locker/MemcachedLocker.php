@@ -2,7 +2,7 @@
 
 namespace Simpleue\Locker;
 
-class MemcachedLocker extends LockerAbstract
+class MemcachedLocker extends BaseLocker
 {
     /**
      * @var \Memcached;
@@ -31,16 +31,11 @@ class MemcachedLocker extends LockerAbstract
         if (!$job) {
             throw new \RuntimeException('Job for lock is invalid!');
         }
-        $status = $this->memcached->add(
+        return $this->memcached->add(
             $this->getJobUniqId($job),
             time() + $timeout + 1,
             $timeout
         );
-        if ($status) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function disconnect()
